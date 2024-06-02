@@ -10,6 +10,7 @@ function App() {
     <Router>
       <Switch>
         <Route path="/articles" component={ArticlesPage} />
+        <Route path="/articles/:id" component={ArticleDetailPage} />
         <Route path="/categories" component={CategoriesPage} />
         <Route path="/login" component={LoginPage} />
         <Route path="/register" component={RegisterPage} />
