@@ -1,15 +1,26 @@
-import express from "express";
-import cors from "cors";
-import records from "./routes/record.js";
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const dotenv = require('dotenv');
 
-const PORT = process.env.PORT || 5050;
+dotenv.config();
+
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use("/record", records);
 
-// start the Express server
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-});
+const PORT = process.env.PORT || 5050;
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}, () => console.log('Connected to MongoDB'));
+
+// Routes
+app.use('/api/articles', require('./routes/articleRoutes'));
+app.use('/api/categories', require('./routes/categoryRoutes'));
+app.use('/api/auth', require('./routes/authRoutes'));
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
