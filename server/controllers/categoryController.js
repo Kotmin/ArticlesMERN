@@ -23,7 +23,12 @@ exports.getCategoryById = async (req, res) => {
 
 // Create a new category
 exports.createCategory = async (req, res) => {
-  const category = new Category(req.body);
+    const { name, abbreviation } = req.body;
+  if (!name || !abbreviation) {
+    return res.status(400).json({ message: 'Name and abbreviation are required' });
+  }
+
+  const category = new Category({ name, abbreviation });
   try {
     const newCategory = await category.save();
     res.status(201).json(newCategory);

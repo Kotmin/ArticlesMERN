@@ -12,6 +12,8 @@ function App() {
         <Route path="/articles" component={ArticlesPage} />
         <Route path="/articles/:id" component={ArticleDetailPage} />
         <Route path="/categories" component={CategoriesPage} />
+        <Route path="/create-category" component={CreateCategory} />
+        <Route path="/create-article" component={CreateArticle} />
         <Route path="/login" component={LoginPage} />
         <Route path="/register" component={RegisterPage} />
       </Switch>

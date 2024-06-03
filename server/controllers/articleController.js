@@ -23,14 +23,32 @@ exports.getArticleById = async (req, res) => {
 
 // Create a new article
 exports.createArticle = async (req, res) => {
-  const article = new Article(req.body);
-  try {
-    const newArticle = await article.save();
-    res.status(201).json(newArticle);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
+    const { title, subtitle, description, tags, category, authors, thumbnailPath } = req.body;
+    if (!title || !description || !category) {
+      return res.status(400).json({ message: 'Title, description, and category are required' });
+    }
+  
+    const article = new Article({
+      title,
+      subtitle,
+      description,
+      tags,
+      category,
+      authors,
+      thumbnailPath,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      publishedAt: null,
+      status: 'draft'
+    });
+  
+    try {
+      const newArticle = await article.save();
+      res.status(201).json(newArticle);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  };
 
 // Update an article
 exports.updateArticle = async (req, res) => {
