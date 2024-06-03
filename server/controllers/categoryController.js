@@ -37,16 +37,29 @@ exports.createCategory = async (req, res) => {
   }
 };
 
-// Update a category
+const Category = require('../models/Category');
+
 exports.updateCategory = async (req, res) => {
+  const { name, abbreviation } = req.body;
+  if (!name || !abbreviation) {
+    return res.status(400).json({ message: 'Name and abbreviation are required' });
+  }
+
   try {
-    const category = await Category.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!category) return res.status(404).json({ message: 'Category not found' });
-    res.json(category);
+    const category = await Category.findById(req.params.id);
+    if (!category) {
+      return res.status(404).json({ message: 'Category not found' });
+    }
+
+    category.name = name;
+    category.abbreviation = abbreviation;
+    const updatedCategory = await category.save();
+    res.json(updatedCategory);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
+
 
 // Delete a category
 exports.deleteCategory = async (req, res) => {
