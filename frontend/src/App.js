@@ -6,6 +6,8 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 
 function App() {
+    const [auth, setAuth] = useState(!!localStorage.getItem('token'));
+    
   return (
     <Router>
       <Switch>
@@ -14,8 +16,11 @@ function App() {
         <Route path="/categories" component={CategoriesPage} />
         <Route path="/create-category" component={CreateCategory} />
         <Route path="/create-article" component={CreateArticle} />
-        <Route path="/login" component={LoginPage} />
+        {/* <Route path="/login" component={LoginPage} /> */}
         <Route path="/register" component={RegisterPage} />
+        <Route path="/login">
+          <Login setAuth={setAuth} />
+        </Route>
       </Switch>
     </Router>
   );
