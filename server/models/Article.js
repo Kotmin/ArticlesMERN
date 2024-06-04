@@ -10,10 +10,8 @@ const articleSchema = new mongoose.Schema({
   articlePath: { type: String, required: true },
   thumbnailPath: { type: String, required: true },
   authors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }],
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date },
   publishedAt: { type: Date },
   status: { type: String, enum: ['draft', 'published', 'archived'], default: 'draft' }
-});
+}, {timestamps: true}); // should replace createdAt and updatedAt with timestamps
 
 module.exports = mongoose.model('Article', articleSchema);

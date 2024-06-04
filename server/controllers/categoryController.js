@@ -37,8 +37,6 @@ exports.createCategory = async (req, res) => {
   }
 };
 
-const Category = require('../models/Category');
-
 exports.updateCategory = async (req, res) => {
   const { name, abbreviation } = req.body;
   if (!name || !abbreviation) {

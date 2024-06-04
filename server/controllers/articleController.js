@@ -1,4 +1,5 @@
 const Article = require('../models/Article');
+const User = require('../models/User');
 
 // Get all articles
 exports.getAllArticles = async (req, res) => {

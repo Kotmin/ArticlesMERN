@@ -16,12 +16,12 @@ const router = express.Router();
 // router.delete('/:id', auth, deleteCategory); // Protected route
 
 router.route('/')
-  .post(protect, admin, createCategory)
-  .get(getCategories);
+  .post(createCategory)
+  .get(getAllCategories);
 
 router.route('/:id')
-  .put(protect, admin, updateCategory)
-  .delete(protect, admin, deleteCategory);
+  .put(updateCategory)
+  .delete(deleteCategory);
 
 
 module.exports = router;

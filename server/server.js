@@ -16,11 +16,11 @@ const PORT = process.env.PORT || 5050;
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
-}, () => console.log('Connected to MongoDB'));
+}).then(() => console.log('Connected to MongoDB'))
+  .catch(error => console.log(error));
 
 // Routes
 app.use('/api/articles', require('./routes/articleRoutes'));
 app.use('/api/categories', require('./routes/categoryRoutes'));
-app.use('/api/auth', require('./routes/authRoutes'));
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
