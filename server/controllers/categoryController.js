@@ -23,7 +23,15 @@ exports.getCategoryById = async (req, res) => {
 
 // Create a new category
 exports.createCategory = async (req, res) => {
-    const { name, abbreviation } = req.body;
+    // const { name, abbreviation } = req.body;
+    // console.log(req)
+    // console.log("----------------------------------")
+    // console.log(req.body)
+
+    let name = req.query.name
+    let abbreviation =req.query.abbreviation
+
+
   if (!name || !abbreviation) {
     return res.status(400).json({ message: 'Name and abbreviation are required' });
   }
