@@ -20,6 +20,7 @@ router.route('/')
   .get(getAllCategories);
 
 router.route('/:id')
+  .get(getCategoryById)
   .put(updateCategory)
   .delete(deleteCategory);
 
