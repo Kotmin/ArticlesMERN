@@ -32,5 +32,6 @@ mongoose.connect(mongoUrl, {})
 // Routes
 app.use('/api/articles', require('./routes/articleRoutes'));
 app.use('/api/categories', require('./routes/categoryRoutes'));
+app.use('/api/users', require('./routes/userRoutes'));
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

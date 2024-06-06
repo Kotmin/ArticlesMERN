@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   rank: {
     type: String,
-    enum: ['Guest', 'Regular', 'Worker', 'Moderator', 'Admin'],
+    enum: ['Guest', 'Regular', 'Worker', 'Moderator', 'Admin',"Banned","Deleted"],
     default: 'Regular'
   },
   registrationDate: { type: Date, default: Date.now },
