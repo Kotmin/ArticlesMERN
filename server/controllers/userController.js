@@ -34,8 +34,9 @@ exports.changeRank = async (req, res) => {
       if (!user) return res.status(404).json({ message: 'User not found' });
   
       if (password) {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        user.password = hashedPassword;
+        // const hashedPassword = await bcrypt.hash(password, 10);
+        // user.password = hashedPassword;
+        user.password = password;
       }
       if (profileDescription) {
         user.profileDescription = profileDescription;
