@@ -1,20 +1,28 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
+
+
+const contactSchema = new mongoose.Schema({
+  email: { type: String, required: true, unique: true },
+  phone: { type: String }
+});
+
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   rank: {
     type: String,
-    enum: ['Guest', 'Regular', 'Worker', 'Moderator', 'Admin',"Banned","Deleted"],
+    enum: ['NotActive', 'Regular', 'Worker', 'Moderator', 'Admin',"Banned","Deleted"],
     default: 'Regular'
   },
-  registrationDate: { type: Date, default: Date.now },
-  passwordChangedDate: { type: Date },
-  lastOnlineDate: { type: Date },
+  contact: contactSchema,
+  // registrationDate: { type: Date, default: Date.now },
+  // passwordChangedDate: { type: Date },
+  // lastOnlineDate: { type: Date },
   articles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Article' }],
   profileDescription: { type: String }
-});
+}, { timestamps: true });
 
 // Pre-save middleware to hash password
 userSchema.pre('save', async function (next) {

@@ -2,6 +2,8 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+const validator = require('validator');
+
 // Change user rank
 exports.changeRank = async (req, res) => {
     const { userId, newRank } = req.body;
@@ -24,15 +26,40 @@ exports.changeRank = async (req, res) => {
   
   // Update user profile
   exports.updateUser = async (req, res) => {
-    const { userId, password, profileDescription } = req.body;
+    const { userId, password, profileDescription, email, phone }= req.body;
+    
     if (!userId) {
       return res.status(400).json({ message: 'User ID is required' });
     }
+
+    if (email && !validator.isEmail(email)) {
+      return res.status(400).json({ message: 'Invalid email format' });
+    }
+    if (password && password.length < 10) {
+      return res.status(400).json({ message: 'Password must be at least 11 characters long' });
+    }
+
   
     try {
       const user = await User.findById(userId);
       if (!user) return res.status(404).json({ message: 'User not found' });
   
+
+      if (email) {
+        const existingEmail = await User.findOne({ 'contact.email': email });
+        if (existingEmail && existingEmail._id.toString() !== userId) {
+          return res.status(400).json({ message: 'Email already in use' });
+        }
+        user.contact.email = email;
+      }
+      if (phone) {
+        const existingPhone = await User.findOne({ 'contact.phone': phone });
+        if (existingPhone && existingPhone._id.toString() !== userId) {
+          return res.status(400).json({ message: 'Phone number already in use' });
+        }
+        user.contact.phone = phone;
+      }
+
       if (password) {
         // const hashedPassword = await bcrypt.hash(password, 10);
         // user.password = hashedPassword;

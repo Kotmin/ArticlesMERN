@@ -1,12 +1,26 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const validator = require('validator');
+
 
 // User registration
 exports.registerUser = async (req, res) => {
-  const { username, password, profileDescription } = req.body;
-  if (!username || !password) {
-    return res.status(400).json({ message: 'Username and password are required' });
+  const { username, password, email,
+          phone, profileDescription } = req.body;
+
+  // Basic validations
+  if (!username || !password || !email) {
+    return res.status(400).json({ message: 'Username, password, and email are required' });
+  }
+  if (username.length > 64) {
+    return res.status(400).json({ message: 'Username cannot exceed 64 characters' });
+  }
+  if (password.length < 10) {
+    return res.status(400).json({ message: 'Password must be at least 10 characters long' });
+  }
+  if (!validator.isEmail(email)) {
+    return res.status(400).json({ message: 'Invalid email format' });
   }
 
   try {
@@ -20,6 +34,7 @@ exports.registerUser = async (req, res) => {
       username,
       // password: hashedPassword,
       password,
+      contact: { email, phone },
       profileDescription
     });
 
