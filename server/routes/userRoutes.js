@@ -26,12 +26,11 @@ router.put('/rank', changeRank);
 router.put('/update', updateUser); // just pass and description
 
 
-router.route('/delete/:id')
-  .delete(deleteUser)
+router.route('/deactivate/:id')
   .put(softDeleteUser); // changes rank to "Deleted"
 
-
-
+router.route('/:id')
+  .delete(deleteUser)
 
 
 
