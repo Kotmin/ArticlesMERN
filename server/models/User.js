@@ -18,8 +18,8 @@ const userSchema = new mongoose.Schema({
   },
   contact: contactSchema,
   // registrationDate: { type: Date, default: Date.now },
-  // passwordChangedDate: { type: Date },
   // lastOnlineDate: { type: Date },
+  passwordChangedDate: { type: Date },
   articles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Article' }],
   profileDescription: { type: String }
 }, { timestamps: true });

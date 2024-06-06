@@ -61,8 +61,7 @@ exports.changeRank = async (req, res) => {
       }
 
       if (password) {
-        // const hashedPassword = await bcrypt.hash(password, 10);
-        // user.password = hashedPassword;
+
         user.password = password;
       }
       if (profileDescription) {
