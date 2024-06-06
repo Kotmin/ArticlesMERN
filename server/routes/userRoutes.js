@@ -23,8 +23,8 @@ router.put('/rank', changeRank);
 router.put('/update', updateUser); // just pass and description
 
 
-router.route('/delete')
-  .delete(auth,deleteUser)
+router.route('/delete/:id')
+  .delete(deleteUser)
   .put(softDeleteUser); // changes rank to "Deleted"
 
 

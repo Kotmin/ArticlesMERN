@@ -60,7 +60,7 @@ exports.changeRank = async (req, res) => {
   
   // Delete user
   exports.deleteUser = async (req, res) => {
-    const { userId } = req.body;
+    const  userId  = req.params.id;
     if (!userId) {
       return res.status(400).json({ message: 'User ID is required' });
     }
@@ -77,7 +77,7 @@ exports.changeRank = async (req, res) => {
   
   // Soft delete user
   exports.softDeleteUser = async (req, res) => {
-    const { userId } = req.body;
+    const  userId  = req.params.id;
     if (!userId) {
       return res.status(400).json({ message: 'User ID is required' });
     }

@@ -19,6 +19,7 @@ exports.registerUser = async (req, res) => {
     const user = new User({
       username,
       password: hashedPassword,
+      password,
       profileDescription
     });
 

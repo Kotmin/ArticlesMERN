@@ -18,13 +18,13 @@ const PORT = process.env.PORT || 5050;
 
 // docker run -d -p 27017:27017 --name my-mongodb mongo:latest
 
-const mongoUrl = 'mongodb://localhost:27017/mernapp';
+// const mongoUrl = 'mongodb://localhost:27017/mernapp';
 
 
 
 // Connect to MongoDB
-// mongoose.connect(process.env.MONGO_URI, {
-mongoose.connect(mongoUrl, {})
+mongoose.connect(process.env.MONGO_URI, {})
+// mongoose.connect(mongoUrl, {})
   .then(() => console.log('Connected to MongoDB'))
   .catch(error => console.log(error));
 
