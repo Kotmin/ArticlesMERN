@@ -22,7 +22,13 @@ articleSchema.pre('save', async function (next) {
     });
 
     if (populatedArticle) {
-      this.authors = populatedArticle.authors;
+      console.log("Yey we have populated Article");
+      this.authors = populatedArticle.authors.map(author => ({
+        _id: author._id,
+        username: author.username,
+        profileDescription: author.profileDescription,
+        articles: author.articles
+      }));
     }
 
     next();
