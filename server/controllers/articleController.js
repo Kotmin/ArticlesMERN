@@ -1,4 +1,5 @@
 const Article = require('../models/Article');
+const Category = require('../models/Category');
 const User = require('../models/User');
 const validator = require('validator');
 
