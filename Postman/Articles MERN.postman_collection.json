@@ -64,8 +64,77 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "New Article Multiple Authors",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\":\"Random Ryan article\",\n    \"header\": \"Who is Ryan8\",\n    \"description\": \" MongoDb Express React Node.js? What an unusual incantation. Cuz that was spell, riht?\",\n    \"authors\": [\"6661edfd551ecc1aa8cdd5cb\"],\n    \"category\": \"665f973cbe98310805689b6d\",\n    \"articlePath\": \"res/respath\",\n    \"thumbnailPath\": \"res/respath\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/articles",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"articles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Article",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\":\"Not Mern2 app\",\n    \"description\": \" MongoDb Express React Node.js? What an unusual incantation. Cuz that was spell, riht?\",\n    \"authors\": [\"6661edfd551ecc1aa8cdd5cb\",\"6661bd9a83a003ae6b3522ab\"],\n    \"thumbnailPath\": \"res/respath\",\n    // \"status\":\"published\",\n    \"status\":\"draft\",\n    \"tags\":[\"fun\"],\n    \"articlePath\":\"re/re\"\n    // ,\"category\":\"666037ab175265cf564540b5\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/articles/6662e1f9bb9d5bb80c752c44",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"articles",
+								"6662e1f9bb9d5bb80c752c44"
+							]
+						}
+					},
+					"response": []
 				}
 			]
+		},
+		{
+			"name": "Users",
+			"item": []
 		},
 		{
 			"name": "Get cooking category",

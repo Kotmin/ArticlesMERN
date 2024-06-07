@@ -21,7 +21,7 @@ articleSchema.pre('save', async function (next) {
   
   try {
     if (this.status == 'published') {
-      this.publishedAt = Date.now();
+      this.publishedAt = new Date.now();
     }
     next();
   } catch (err) {
