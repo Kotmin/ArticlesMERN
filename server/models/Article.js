@@ -10,18 +10,19 @@ const articleSchema = new mongoose.Schema({
   articlePath: { type: String, required: true },
   thumbnailPath: { type: String, required: true },
   authors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }],
-  publishedAt: { type: Date },
+  publishedAt: { type: Date, default: null },
   status: { type: String, enum: ['draft', 'published', 'archived'], default: 'draft' }
 }, {timestamps: true}); // should replace createdAt and updatedAt with timestamps
 
 
 // Pre-save middleware to hash password
-articleSchema.pre('save', async function (next) {
-  if (!this.isModified('status')) return next();
-  
+articleSchema.pre('findByIdAndUpdate', async function (next) {
+  // if (!this.isModified('status')) return next();
+  const update = this.getUpdate();
+
   try {
     if (this.status == 'published') {
-      this.publishedAt = new Date.now();
+      this.publishedAt = Date.now();
     }
     next();
   } catch (err) {
