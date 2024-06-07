@@ -8,6 +8,66 @@
 	},
 	"item": [
 		{
+			"name": "Articles",
+			"item": [
+				{
+					"name": "All Articles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/articles",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"articles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Article",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\":\"Free Cookies the best thing at work?\",\n    \"header\": \"Cookies at work\",\n    \"description\": \" MongoDb Express React Node.js? What an unusual incantation. Cuz that was spell, riht?\",\n    \"authors\": [\"6661edfd551ecc1aa8cdd5cb\"],\n    \"category\": \"665f973cbe98310805689b6d\",\n    \"articlePath\": \"res/respath\",\n    \"thumbnailPath\": \"res/respath\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/articles",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"articles"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Get cooking category",
 			"request": {
 				"method": "GET",
@@ -467,6 +527,55 @@
 						{
 							"key": "Authorization",
 							"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NjFiN2E0ODNhMDAzYWU2YjM1MjJhNSIsInJhbmsiOiJSZWd1bGFyIiwiaWF0IjoxNzE3NjgwMDcyLCJleHAiOjE3MTc2ODM2NzJ9.HDFNbyU5GbpvnGMvBPlSCIz-pRppo3FwBoKKs0hoJYI"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "credentials Eve USER",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NjFiN2E0ODNhMDAzYWU2YjM1MjJhNSIsInJhbmsiOiJSZWd1bGFyIiwiaWF0IjoxNzE3NjgwMDcyLCJleHAiOjE3MTc2ODM2NzJ9.HDFNbyU5GbpvnGMvBPlSCIz-pRppo3FwBoKKs0hoJYI",
+						"uuid": "a85edcad-9b3c-4a51-bd84-24fade6e82b5"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userId\":\"6661f0935759cbb33938b501\",\n    \"password\":\"Appricots13\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/api/users/update",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"users",
+						"update"
+					],
+					"query": [
+						{
+							"key": "Authorization",
+							"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NjFiN2E0ODNhMDAzYWU2YjM1MjJhNSIsInJhbmsiOiJSZWd1bGFyIiwiaWF0IjoxNzE3NjgwMDcyLCJleHAiOjE3MTc2ODM2NzJ9.HDFNbyU5GbpvnGMvBPlSCIz-pRppo3FwBoKKs0hoJYI",
+							"disabled": true
 						}
 					]
 				}
