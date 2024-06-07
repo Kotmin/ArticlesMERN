@@ -30,14 +30,6 @@ exports.createArticle = async (req, res) => {
     }
 
 
-    if (title) {
-      const existingTitle = await User.findOne({ 'contact.email': email });
-      if (existingTitle && existingTitle._id.toString() !== userId) {
-        return res.status(400).json({ message: 'Title already in use' });
-      }
-      user.contact.email = email;
-    }
-  
     const article = new Article({
       title,
       subtitle,

@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const articleSchema = new mongoose.Schema({
-  title: { type: String, required: true, unique: true },
-  header: { type: String, required: true },
+  title: { type: String, required: true },
+  header: { type: String, required: true, unique: true  }, // let's assume that would be also part of uri
   subheader: { type: String },
   description: { type: String, required: true },
   tags: [String],
