@@ -58,4 +58,12 @@ articleSchema.post('findOneAndDelete', async function (doc) {
   }
 });
 
+articleSchema.pre('findOneAndUpdate', function (next) {
+  const update = this.getUpdate();
+  if (update.status === 'published' && !update.publishedAt) {
+    update.publishedAt = Date.now();
+  }
+  next();
+});
+
 module.exports = mongoose.model('Article', articleSchema);
