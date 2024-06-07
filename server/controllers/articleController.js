@@ -80,7 +80,11 @@ exports.createArticle = async (req, res) => {
 
 // Update an article
 exports.updateArticle = async (req, res) => {
-  const { header } = req.body;
+  const { title, header, subheader, description,
+    tags, category,
+    articlePath, thumbnailPath,
+    authors,
+    status  } = req.body;
   if (header && !validator.isAlphanumeric(header, 'en-US', { ignore: ' -_' })) {
     return res.status(400).json({ message: 'Header can only contain letters, numbers, spaces, dashes, and underscores' });
   }
@@ -93,6 +97,24 @@ exports.updateArticle = async (req, res) => {
       }
     }
 
+    if (authors) {
+      const authorsExist = await User.countDocuments({ _id: { $in: authors } });
+      if (authorsExist !== authors.length) {
+        return res.status(400).json({ message: 'One or more authors do not exist' });
+      }
+    }
+
+    if (category) {
+      const categoryExists = await Category.findById(category);
+      if (!categoryExists) {
+        return res.status(400).json({ message: 'Category does not exist' });
+      }
+    }
+
+
+    const updateData = req.body;
+
+    
     const article = await Article.findByIdAndUpdate(req.params.id,req.body, { new: true }).populate('category').populate('authors');
     if (!article) return res.status(404).json({ message: 'Article not found' });
 

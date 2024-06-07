@@ -15,7 +15,18 @@ const articleSchema = new mongoose.Schema({
 }, {timestamps: true}); // should replace createdAt and updatedAt with timestamps
 
 
-
+// Pre-save middleware to hash password
+articleSchema.pre('save', async function (next) {
+  if (!this.isModified('status')) return next();
+  
+  try {
+    if(this.status === 'published')
+      this.publishedAt = Date.now();
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
 articleSchema.post('save', async function (doc) {
   // After saving an article, update the users' articles field
