@@ -97,7 +97,7 @@ exports.updateArticle = async (req, res) => {
     if (!article) return res.status(404).json({ message: 'Article not found' });
 
     if (header) {
-      article.articlePath = `/${header}`;
+      article.header = header;
       await article.save();
     }
 

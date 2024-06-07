@@ -14,28 +14,7 @@ const articleSchema = new mongoose.Schema({
   status: { type: String, enum: ['draft', 'published', 'archived'], default: 'draft' }
 }, {timestamps: true}); // should replace createdAt and updatedAt with timestamps
 
-articleSchema.pre('save', async function (next) {
-  try {
-    const populatedArticle = await this.constructor.findOne({ _id: this._id }).populate({
-      path: 'authors',
-      select: '_id username profileDescription articles'
-    });
 
-    if (populatedArticle) {
-      console.log("Yey we have populated Article");
-      this.authors = populatedArticle.authors.map(author => ({
-        _id: author._id,
-        username: author.username,
-        profileDescription: author.profileDescription,
-        articles: author.articles
-      }));
-    }
-
-    next();
-  } catch (err) {
-    next(err);
-  }
-});
 
 
 articleSchema.post('save', async function (doc) {
