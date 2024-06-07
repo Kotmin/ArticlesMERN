@@ -14,4 +14,44 @@ const articleSchema = new mongoose.Schema({
   status: { type: String, enum: ['draft', 'published', 'archived'], default: 'draft' }
 }, {timestamps: true}); // should replace createdAt and updatedAt with timestamps
 
+articleSchema.pre('save', async function (next) {
+  try {
+    await this.populate({
+      path: 'authors',
+      select: '_id username profileDescription articles'
+    }).execPopulate();
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
+articleSchema.post('save', async function (doc) {
+  // After saving an article, update the users' articles field
+  await mongoose.model('User').updateMany(
+    { _id: { $in: doc.authors } },
+    { $addToSet: { articles: doc._id } }
+  );
+});
+
+articleSchema.post('findOneAndUpdate', async function (doc) {
+  // After updating an article, update the users' articles field
+  if (doc) {
+    await mongoose.model('User').updateMany(
+      { _id: { $in: doc.authors } },
+      { $addToSet: { articles: doc._id } }
+    );
+  }
+});
+
+articleSchema.post('findOneAndDelete', async function (doc) {
+  // After deleting an article, remove it from users' articles field
+  if (doc) {
+    await mongoose.model('User').updateMany(
+      { _id: { $in: doc.authors } },
+      { $pull: { articles: doc._id } }
+    );
+  }
+});
+
 module.exports = mongoose.model('Article', articleSchema);
