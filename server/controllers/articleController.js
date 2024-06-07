@@ -5,7 +5,17 @@ const validator = require('validator');
 // Get all articles
 exports.getAllArticles = async (req, res) => {
   try {
-    const articles = await Article.find().populate('category').populate('authors');
+    const query = { status: 'draft' };
+    const articles = await Article.find(query).populate('category').populate({
+      path: 'authors',
+      select: '_id username profileDescription articles',
+      populate: [
+        {
+          path:'articles',
+          select: '_id title'
+        }
+      ]
+    });
     res.json(articles);
   } catch (error) {
     res.status(500).json({ message: error.message });
