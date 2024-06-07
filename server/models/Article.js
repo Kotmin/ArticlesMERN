@@ -16,15 +16,21 @@ const articleSchema = new mongoose.Schema({
 
 articleSchema.pre('save', async function (next) {
   try {
-    await this.populate({
+    const populatedArticle = await this.constructor.findOne({ _id: this._id }).populate({
       path: 'authors',
       select: '_id username profileDescription articles'
-    }).execPopulate();
+    });
+
+    if (populatedArticle) {
+      this.authors = populatedArticle.authors;
+    }
+
     next();
   } catch (err) {
     next(err);
   }
 });
+
 
 articleSchema.post('save', async function (doc) {
   // After saving an article, update the users' articles field
