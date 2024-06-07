@@ -5,7 +5,7 @@ const validator = require('validator');
 // Get all articles
 exports.getAllArticles = async (req, res) => {
   try {
-    const query = { status: 'draft' };
+    const query = { status: 'published' };
     const articles = await Article.find(query).populate('category').populate({
       path: 'authors',
       select: '_id username profileDescription articles',
@@ -111,17 +111,25 @@ exports.updateArticle = async (req, res) => {
       }
     }
 
-
-    const updateData = req.body;
-
-    
-    const article = await Article.findByIdAndUpdate(req.params.id,req.body, { new: true }).populate('category').populate('authors');
+    const article = await Article.findByIdAndUpdate(req.params.id,req.body, { new: true })//.populate('category').populate('authors');
     if (!article) return res.status(404).json({ message: 'Article not found' });
 
-    if (header) {
-      article.header = header;
+    if(category){
+      article.category = category;
       await article.save();
     }
+
+    if(status){
+      article.status = status;
+      await article.save();
+    }
+
+    // if (header) {
+    //   article.header = header;
+    //   await article.save();
+    // }
+
+    // await article.save();
 
     res.json(article);
   } catch (error) {

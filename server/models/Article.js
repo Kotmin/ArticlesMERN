@@ -20,8 +20,9 @@ articleSchema.pre('save', async function (next) {
   if (!this.isModified('status')) return next();
   
   try {
-    if(this.status === 'published')
+    if (this.status == 'published') {
       this.publishedAt = Date.now();
+    }
     next();
   } catch (err) {
     next(err);
