@@ -8,7 +8,7 @@ const ownershipMiddleware = async (req, res, next) => {
       return res.status(400).json({ message: 'User ID is required' });
     }
     
-    if (req.user.role === 'Admin' || req.user.role === 'Moderator') {
+    if (req.user.rank === 'Admin' || req.user.rank === 'Moderator') {
       return next(); // Admins and Moderators are allowed
     }
 

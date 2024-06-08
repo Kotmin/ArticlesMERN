@@ -1,12 +1,12 @@
 const Article = require('../models/Article');
-const { roles } = require('../models/User');
+const { rank } = require('../models/User');
 
 const ownershipOrRoleMiddleware = (req, res, next) => {
   if (!req.user) {
     return res.status(401).json({ message: 'Not logged in' });
   }
 
-  const userRole = req.user.role;
+  const userRole = req.user.rank;
   const allowedRoles = ["Worker", "Moderator", "Admin"];
 
   if (allowedRoles.includes(userRole)) {

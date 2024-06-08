@@ -1,16 +1,16 @@
-const { roles: rank } = require('../models/User');
+const { ranks: rank } = require('../models/User');
 
-const rankMiddleware = (requiredRoles) => {
+const rankMiddleware = (requiredranks) => {
   return (req, res, next) => {
     if (!req.user) {
       return res.status(401).json({ message: 'Not logged in' });
     }
 
-    if (rank.indexOf(req.user.role) >= rank.indexOf("Banned")) {
+    if (rank.indexOf(req.user.rank) >= rank.indexOf("Banned")) {
       return res.status(403).json({ message: 'Access restricted' });
     }
 
-    if (requiredRoles.includes(req.user.role)) {
+    if (requiredranks.includes(req.user.rank)) {
       return next();
     } else {
       return res.status(403).json({ message: 'Access denied' });
@@ -18,4 +18,4 @@ const rankMiddleware = (requiredRoles) => {
   };
 };
 
-module.exports = roleMiddleware;
+module.exports = rankMiddleware;

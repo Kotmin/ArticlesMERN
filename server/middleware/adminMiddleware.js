@@ -8,7 +8,7 @@ const adminMiddleware = async (req, res, next) => {
       return res.status(400).json({ message: 'User not logged' });
     }
 
-    if (req.user.role !== 'Admin') {
+    if (req.user.rank !== 'Admin') {
         return res.status(403).json({ message: 'Access denied. AO' });
       }
       next();
