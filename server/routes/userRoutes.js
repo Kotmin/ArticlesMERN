@@ -6,6 +6,10 @@ const { changeRank, updateUser,
         softDeleteUser } = require('../controllers/userController');
 const auth = require('../middleware/authMiddleware');
 
+const worker = require('../middleware/workerMiddleware.js');
+
+
+
 const router = express.Router();
 
 
@@ -21,7 +25,7 @@ router.get('/profile', auth, (req, res) => {
 });
 
 
-router.put('/rank', changeRank);
+router.put('/rank',auth, worker, changeRank);
 
 router.put('/update', updateUser); // just pass and description
 

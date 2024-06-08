@@ -7,6 +7,9 @@ const {
   deleteArticle
 } = require('../controllers/articleController');
 const auth = require('../middleware/authMiddleware');
+const owner = require('../middleware/ownershipArticleMiddleware');
+
+
 const router = express.Router();
 
 // router.post('/', auth, createArticle); // Protected route
@@ -22,6 +25,20 @@ router.route('/:id')
   .get(getArticleById)
   .put(updateArticle)
   .delete(deleteArticle);
+
+
+// temp
+
+// router.route('/')
+//   .get(getAllArticles)
+//   // .get(getAllArticles)
+//   .post(createArticle,auth); 
+
+// router.route('/:id')
+//   .get(getArticleById)
+//   .put(updateArticle)
+//   .delete(deleteArticle);
+
 
 
 
