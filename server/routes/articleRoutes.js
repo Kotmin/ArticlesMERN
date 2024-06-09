@@ -8,6 +8,7 @@ const {
 } = require('../controllers/articleController');
 const auth = require('../middleware/authMiddleware');
 const owner = require('../middleware/ownershipArticleMiddleware');
+const optionalAuth = require('../middleware/optionalAuthMiddleware');
 
 
 const router = express.Router();
@@ -18,7 +19,7 @@ const router = express.Router();
 
 
 router.route('/')
-  .get(getAllArticles)
+  .get(optionalAuth,getAllArticles)
   .post(createArticle); 
 
 router.route('/:id')
