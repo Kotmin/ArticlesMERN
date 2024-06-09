@@ -27,13 +27,17 @@ const validator = require('validator');
 
 exports.getAllArticles = async (req, res) => {
   try {
-    console.log("Hello getAll");
+    // console.log("Hello getAll");
     
     let query = { status: 'published' }; // Default query
 
     if (req.user) {
-      console.log("Hello Logged");
-      console.log(req.user.rank);
+      // console.log("Hello Logged");
+      // console.log(req.user.rank);
+      // console.log(req.user.id);
+      // console.log(req.user);
+
+
       if (req.user.rank === 'Worker' || req.user.rank === 'Moderator' || req.user.rank === 'Admin') {
         // Worker, Moderator, Admin - all Articles
         query = {};
@@ -41,7 +45,7 @@ exports.getAllArticles = async (req, res) => {
         console.log("Hello Regular");
         query = {
           $or: [
-            { authors: req.user._id },
+            { authors: req.user.id },
             { status: 'published' }
           ]
         };
