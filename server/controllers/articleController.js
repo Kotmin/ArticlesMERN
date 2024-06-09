@@ -4,15 +4,58 @@ const User = require('../models/User');
 const validator = require('validator');
 
 // Get all articles
+// exports.getAllArticles = async (req, res) => {
+//   try {
+//     const query = { status: 'published' };
+//     const articles = await Article.find(query).populate('category').populate({
+//       path: 'authors',
+//       select: '_id username profileDescription articles',
+//       populate: [
+//         {
+//           path:'articles',
+//           select: '_id title'
+//         }
+//       ]
+//     });
+//     res.json(articles);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
+
+
+
 exports.getAllArticles = async (req, res) => {
   try {
-    const query = { status: 'published' };
+    let query;
+
+    if(!req.user){
+      query = { status: 'published' };
+    }
+    else {
+      if (req.user.rank === 'Worker' ||req.user.rank === 'Moderator' || req.user.rank === 'Admin') {
+        // If user is Moderator or Admin, return all articles
+        query = {};
+      } else if (req.user.rank === 'Regular') {
+        // If user is Regular, return published articles and articles authored by the user
+        query = {
+          $or: [
+            { status: 'published' },
+            { authors: req.user.id }
+          ]
+        };
+      } else {
+        // For regular users, return only published articles
+        query = { status: 'published' };
+      }
+  }
+
     const articles = await Article.find(query).populate('category').populate({
       path: 'authors',
       select: '_id username profileDescription articles',
       populate: [
         {
-          path:'articles',
+          path: 'articles',
           select: '_id title'
         }
       ]
@@ -22,6 +65,8 @@ exports.getAllArticles = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
 
 // Get article by ID
 exports.getArticleById = async (req, res) => {
