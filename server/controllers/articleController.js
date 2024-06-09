@@ -27,32 +27,26 @@ const validator = require('validator');
 
 exports.getAllArticles = async (req, res) => {
   try {
-    let query;
     console.log("Hello getAll");
+    
+    let query = { status: 'published' }; // Default query
 
-    if(!req.user){
-      query = { status: 'published' };
+    if (req.user) {
+      console.log("Hello Logged");
+      console.log(req.user.rank);
+      if (req.user.rank === 'Worker' || req.user.rank === 'Moderator' || req.user.rank === 'Admin') {
+        // Worker, Moderator, Admin - all Articles
+        query = {};
+      } else if (req.user.rank === 'Regular') {
+        console.log("Hello Regular");
+        query = {
+          $or: [
+            { authors: req.user._id },
+            { status: 'published' }
+          ]
+        };
+      }
     }
-    else {
-      console.log("Hello user");
-    if (req.user.rank === 'Worker' ||req.user.rank === 'Moderator' || req.user.rank === 'Admin') {
-      // If user is Moderator or Admin, return all articles
-      query = {};
-    }
-     else if (req.user.rank === 'Regular') {
-      // If user is Regular, return published articles and articles authored by the user
-      query = {
-        $or: [
-          { status: 'published' },
-          { authors: req.user.id }
-        ]
-      };
-    }
-     else {
-      // For regular users, return only published articles
-      query = { status: 'published' };
-    }
-  }
 
     const articles = await Article.find(query).populate('category').populate({
       path: 'authors',
