@@ -26,13 +26,13 @@ exports.registerUser = async (req, res) => {
   try {
     const existingUser = await User.findOne({ username });
     if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
+      return res.status(409).json({ message: 'User already exists' });
     }
 
 
     const existingEmail = await User.findOne({ 'contact.email': email });
     if (existingEmail) {
-      return res.status(400).json({ message: 'Email already in use' });
+      return res.status(409).json({ message: 'Email already in use' });
     }
 
     

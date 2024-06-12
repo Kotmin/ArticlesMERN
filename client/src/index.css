@@ -75,16 +75,18 @@ form {
 
 input[type="text"],
 input[type="password"],
+input[type="email"],
 button,
 textarea {
   font-family: 'Nunito', sans-serif;
-  font-size: 22px;
+  font-size: 26px;
   padding: 0.25rem;
   border-radius: 0.5rem;
 }
 label,
 button {
   margin-top: 1rem;
+  font-size: 1.5rem;
 }
 
 button {
@@ -96,7 +98,8 @@ li {
 }
 
 .instructions {
-    font-size: 0.75rem;
+    /* font-size: 0.75rem; */
+    font-size: 1rem;
     border-radius: 0.5rem;
     background: #000;
     color: #fff;
