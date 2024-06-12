@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from 'axios';
+import axios from '../api/axios';
 import { Link } from "react-router-dom";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{1,24}$/;
@@ -67,9 +67,10 @@ const Register = () => {
                 JSON.stringify({ username, password, email }),
                 {
                     headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
+                    withCredentials: false
                 }
             );
+            console.log("Response Data: ", JSON.stringify(response?.data)); 
             setSuccess(true);
             setUser('');
             setEmail('');

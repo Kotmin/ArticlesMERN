@@ -8,7 +8,20 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+
+const corsOptions = {
+  origin: process.env.FRONTEND_URI | 'http://localhost:3000',
+  credentials:true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'] ,
+}
+
+// app.use(cors(corsOptions));
+app.use(cors({ credentials: true }))
+
+// app.use(cors());
+
+
 app.use(morgan("tiny"))
 app.use(express.urlencoded({ extended: true}))
 app.use(express.json());
