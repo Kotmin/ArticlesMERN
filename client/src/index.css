@@ -1,3 +1,30 @@
+
+:root {
+  --background-color: #fff;
+  --text-color: #000; 
+  font-size: 62.5%;
+  /*Z tym fontsize jest fajna sztuczka bo statystycznie najczesciej mamy fontsize 60 i to nam sie bedzie skalowalo ladnie*/
+}
+
+[data-theme="dark"] {
+  --background-color: #3F3F3F;
+  --text-color: #fff;
+}
+
+[data-theme="light"] {
+  --background-color: #fff;
+  --text-color: #000; 
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  /* font-family: motserrat; */
+  transition: background 0.2s linear;
+}
+
+
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,9 +32,224 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* background-color: orange; */
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+
+.App {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; 
+  padding: 1rem 0.5rem;
+}
+
+
+section {
+  width: 100%;
+  max-width: 420px;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 1rem;
+  background-color: rgba(0,0,0,0.4);
+}
+
+
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  flex-grow: 1;
+  padding-bottom: 1rem;
+}
+
+
+input[type="text"],
+input[type="password"],
+button,
+textarea {
+  font-family: 'Nunito', sans-serif;
+  font-size: 22px;
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+}
+label,
+button {
+  margin-top: 1rem;
+}
+
+button {
+  padding: 0.5rem;
+}
+
+li {
+    list-style-type: none;
+}
+
+.instructions {
+    font-size: 0.75rem;
+    border-radius: 0.5rem;
+    background: #000;
+    color: #fff;
+    padding: 0.25rem;
+    position: relative;
+    bottom: -10px;
+}
+
+.instructions > svg {
+    margin-right: 0.25rem;
+}
+
+.offscreen {
+    position: absolute;
+    left: -9999px;
+}
+
+.hide {
+    display: none;
+}
+
+.valid {
+    color: limegreen;
+    margin-left: 0.25rem;
+}
+
+.invalid {
+    color: red;
+    margin-left: 0.25rem;
+}
+
+.errmsg {
+    background-color: lightpink;
+    color: firebrick;
+    font-weight: bold;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.line {
+    display: inline-block;
+}
+
+.flexGrow {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+
+
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+      opacity: 0;
+    }
+
+  100% {
+    transform: translateY(100%) ;
+    opacity: 0;
+  }
+}
+
+.btn {
+  padding: 1em 3em;
+  border-radius: 3em;
+  background: white;
+  border: 1px solid currentColor;
+  cursor: pointer;
+  box-shadow: 0 0 25px -10px currentColor;
+  transition: transform 125 ms ease-in;
+}
+
+.btn:hover,
+.btn:focus {
+  transform: scale(1.2);
+}
+
+@supports selector(:focus-visible){
+  .btn:focus {
+    transform: scale(1);
+  }
+
+  btn:focus-visible {
+    outline-offset: 0.5rem;
+  }
+}
+
+
+/* mode change settings */
+
+.label_toogle {
+  display: flex;
+  background-color:#000;
+  border-radius: 50px;
+  height: 26px;
+  width: 50px;
+  padding:5px;
+  
+  justify-content: space-between;
+  align-items: center;
+  position:relative;
+  
+      
+}
+
+
+
+
+.moon {
+  display: flex;
+background-color: #000;
+/*  color: #f1c40f;*/
+ 
+height: 23px;
+ width: 23px;
+border-radius: 50%;
+border: 4px solid #000;
+/* I set 2 shadows where the first one doesn't have blur and spread for firefox fix. */
+box-shadow: inset 7px -2px #f1c40f, inset 25px 8px 1px 1px #000;
+-moz-box-shadow: inset 0px 16px #000, inset 0px 16px 1px 1px #000;
+}
+
+
+
+.sun {
+  
+  background: #f1c40f;
+  
+  border-radius: 50%;
+  height: 18px;
+  width: 18px;
+}
+
+.ball  {
+  background-color: white;
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  transition: transform 0.2s linear;
+}
+
+.checkbox_swype{
+  opacity: 0;
+  position:absolute;
+  
+}
+
+.checkbox_swype:checked + .label_toogle .ball {
+  transform: translateX(20px);
 }

@@ -1,4 +1,3 @@
-import { useRef, useState, useEffect } from "react";
 
 // This is a React Router v6 app
 import {
@@ -8,16 +7,22 @@ import {
   Link,
 } from "react-router-dom";
 
+import ThemeToggle from './components/ThemeToggle';
+
 import Register from './components/Register';
 
 function App() {
   return (
+    <div className="App">
+
+    <ThemeToggle />
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Register />} />
         {/* <Route path="users/*" element={<Users />} /> */}
       </Routes>
     </BrowserRouter>
+    </div>
   );
 }
 
