@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+
 import axios from '../api/axios'
 
 function Users() {
@@ -30,6 +31,8 @@ function Users() {
             controller.abort();
         }
     },[])
+
+
   return (
     <article>
         <h2>Users: </h2>
