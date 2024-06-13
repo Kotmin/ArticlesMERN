@@ -10,6 +10,7 @@ import {
 import ThemeToggle from './components/ThemeToggle';
 
 import Register from './components/Register';
+import Login from './components/Login';
 
 function App() {
   return (
@@ -19,6 +20,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Register />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
         {/* <Route path="users/*" element={<Users />} /> */}
       </Routes>
     </BrowserRouter>
