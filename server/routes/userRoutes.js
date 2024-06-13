@@ -21,11 +21,13 @@ router.post('/login', loginUser);
 router.get('/', getUsers);
 
 router.get('/profile', auth, (req, res) => {
-  res.json({ message: `Hello ${req.user.id}, this is your profile.` });
+  res.json({ message: `Hello ${req.user.id}, this is your profile.\nYou're: ${req.user.rank}` });
 });
 
 
-router.put('/rank',auth, worker, changeRank);
+// router.put('/rank',auth, worker, changeRank);
+
+router.put('/rank',auth, changeRank);
 
 router.put('/update', updateUser); // just pass and description
 
