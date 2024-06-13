@@ -32,16 +32,16 @@ const Login = () => {
 
         try {
             const response = await axios.post(LOGIN_URL,
-                JSON.stringify({ user: username, pwd: password }),
+                JSON.stringify({  username, password }),
                 {
                     headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
+                    // withCredentials: true
                 }
             );
             console.log(JSON.stringify(response?.data));
             console.log(JSON.stringify(response));
-            const accessToken = response?.data?.accessToken;
-            const roles = response?.data?.roles;
+            const accessToken = response?.data?.token;
+            const roles = response?.data?.rank;
             setAuth({ user: username, pwd: password, roles, accessToken });
             setUser('');
             setPwd('');
