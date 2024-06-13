@@ -40,8 +40,12 @@ const Login = () => {
             );
             console.log(JSON.stringify(response?.data));
             console.log(JSON.stringify(response));
+            const roles = response?.data?.roles;
             const accessToken = response?.data?.token;
-            const roles = response?.data?.rank;
+
+            console.log("roles:", roles); // Powinno wyświetlić "Admin"
+            console.log("accessToken:", accessToken); // Powinno wyświetlić Twój token
+
             setAuth({username, password, roles, accessToken });
             setUser('');
             setPwd('');

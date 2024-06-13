@@ -18,6 +18,8 @@ import Users from './components/Users';
 
 import AddArticle from './components/AddArticle';
 
+import RequireAuth from './components/RequireAuth';
+
  
 
 function App() {
@@ -27,12 +29,22 @@ function App() {
     <ThemeToggle />
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/login" element={<Login />} />
+
+      <Route path="/" element={<Home />} />
+      <Route element={<RequireAuth allowedRoles={["Admin"]} />}>
+
+
+      
         <Route path="/users" element={<Users />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+
 
         <Route path="/addarticle" element={<AddArticle />} />
+
+
+        <Route path="/users" element={<Users />} />
+        </Route>
         {/* <Route path="users/*" element={<Users />} /> */}
       </Routes>
     </BrowserRouter>
