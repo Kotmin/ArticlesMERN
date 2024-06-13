@@ -42,7 +42,7 @@ const Login = () => {
             console.log(JSON.stringify(response));
             const accessToken = response?.data?.token;
             const roles = response?.data?.rank;
-            setAuth({ user: username, pwd: password, roles, accessToken });
+            setAuth({username, password, roles, accessToken });
             setUser('');
             setPwd('');
             navigate(from, { replace: true });
