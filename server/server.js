@@ -17,9 +17,9 @@ const corsOptions = {
 }
 
 // app.use(cors(corsOptions));
-app.use(cors({ credentials: true }))
+// app.use(cors({ credentials: true }))
 
-// app.use(cors());
+app.use(cors());
 
 
 app.use(morgan("tiny"))
