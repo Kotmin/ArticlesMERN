@@ -19,6 +19,7 @@ import Users from './components/Users';
 import AddArticle from './components/AddArticle';
 
 import RequireAuth from './components/RequireAuth';
+import PersistLogin from "./components/PersistLogin";
 
  
 
@@ -33,17 +34,21 @@ function App() {
       <Route path="/login" element={<Login />} />
 
       <Route path="/" element={<Home />} />
-      <Route element={<RequireAuth allowedRoles={["Admin"]} />}>
-
+      <Route element={<PersistLogin />}>
 
       
-        <Route path="/users" element={<Users />} />
+        <Route element={<RequireAuth allowedRoles={["Admin"]} />}>
 
 
-        <Route path="/addarticle" element={<AddArticle />} />
+        
+          <Route path="/users" element={<Users />} />
 
 
-        <Route path="/users" element={<Users />} />
+          <Route path="/addarticle" element={<AddArticle />} />
+
+
+          {/* <Route path="/users" element={<Users />} /> */}
+          </Route>
         </Route>
         {/* <Route path="users/*" element={<Users />} /> */}
       </Routes>
