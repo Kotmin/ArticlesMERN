@@ -15,19 +15,35 @@ function Users() {
         let isMounted = true;
         const controller = new AbortController();
 
+        // const getUsers = async () => {
+        //     try {
+        //         const response = await axiosPrivate.get('/users',{
+        //             signal: controller.signal
+        //         });
+
+        //         console.log(response.data);
+        //         isMounted && setUsers(response.data);
+        //     } catch (err) {
+        //         console.error(err);
+        //         navigate('/login',{state: {from: location}, replace:true});
+        //     }
+        // }
+
         const getUsers = async () => {
             try {
-                const response = await axiosPrivate.get('/users',{
+                const response = await axiosPrivate.get('/users', {
                     signal: controller.signal
                 });
-
-                console.log(response.data);
-                isMounted && setUsers(response.data);
+                if (isMounted) {
+                    setUsers(response.data);
+                }
             } catch (err) {
-                console.error(err);
-                navigate('/login',{state: {from: location}, replace:true});
+                if (err.name !== 'CanceledError') {
+                    console.error(err);
+                    navigate('/login', { state: { from: location }, replace: true });
+                }
             }
-        }
+        };
 
         getUsers();
 

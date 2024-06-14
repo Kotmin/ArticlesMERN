@@ -17,18 +17,23 @@ const useAxiosPrivate = () => {
         );
 
 
+        // const responseIntercept = axiosPrivate.interceptors.response.use(
+        //     response => response,
+        //     async (error) => {
+        //         const prevRequest = error?.config;
+        //         if (!prevRequest?.sent) {
+        //             prevRequest.sent = true;
+
+        //             prevRequest.headers['Authorization'] = `Bearer ${auth?.accessToken}`;
+        //             return axiosPrivate(prevRequest);
+        //         }
+        //         return Promise.reject(error);
+        //     }
+        // );
+
         const responseIntercept = axiosPrivate.interceptors.response.use(
             response => response,
-            async (error) => {
-                const prevRequest = error?.config;
-                if (!prevRequest?.sent) {
-                    prevRequest.sent = true;
-
-                    prevRequest.headers['Authorization'] = `Bearer ${auth?.accessToken}`;
-                    return axiosPrivate(prevRequest);
-                }
-                return Promise.reject(error);
-            }
+            error => Promise.reject(error)
         );
 
 
