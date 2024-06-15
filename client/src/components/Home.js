@@ -17,10 +17,19 @@ const Home = () => {
 
   const { authenticatedUser, setAuthToken } = useAuthContext();
 
-  console.log(authenticatedUser.user.username);
+  // console.log(authenticatedUser.user.username);
 
+
+  let config = {};
+  if(authenticatedUser.user) {
+    const aT = localStorage.getItem("accessToken"); 
+     config = {
+      headers: { Authorization: `Bearer ${aT}` }
+  };
+  }
   useEffect(() => {
-    axios.get(GET_ARTICLES_URL).then(response => {
+
+    axios.get(GET_ARTICLES_URL, config).then(response => {
       const articles = response.data;
       const categoriesMap = {};
 
