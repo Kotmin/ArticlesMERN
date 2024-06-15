@@ -38,9 +38,12 @@ function App() {
         <Route path="/unauthorized" element={<h1>Unauthorized</h1>} />
         <Route element={<ProtectRoute />}>
           {/* Here we can add routes for regular user */}
+          <Route element={<RequireAuth allowedRoles={["Regular","Admin"]} />}>
+            <Route path="/addarticle" element={<AddArticle />} /> 
+          </Route>
+
           <Route element={<RequireAuth allowedRoles={["Admin"]} />}>
             <Route path="/users" element={<Users />} />
-            <Route path="/addarticle" element={<AddArticle />} /> 
           </Route>
         </Route>
       </Routes>
