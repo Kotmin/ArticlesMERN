@@ -16,7 +16,7 @@ const Home = () => {
   const [recentArticles, setRecentArticles] = useState([]);
   const userId = ""; 
 
-  const { authenticatedUser, setAuthToken } = useAuthContext();
+  const { authenticatedUser, setAuthToken, loading } = useAuthContext();
 
   // console.log(authenticatedUser.user.username);
   
@@ -27,12 +27,16 @@ const Home = () => {
     const aT = localStorage.getItem("accessToken"); 
      config = {
       headers: { Authorization: `Bearer ${aT}` }
-  };
+    };
   }
   useEffect(() => {
 
     axios.get(GET_ARTICLES_URL, config).then(response => {
       const articles = response.data;
+
+      const draftArticles = articles.filter(article => article.status === 'draft');
+      console.log(draftArticles)
+
       const categoriesMap = {};
 
       articles.forEach(article => {
@@ -49,7 +53,7 @@ const Home = () => {
     // axios.get('/api/articles?sort=-publishedAt&limit=3').then(response => {
     //   setRecentArticles(response.data);
     // });
-  }, []);
+  }, [loading]);
 
   const handleViewChange = (newView) => {
     setView(newView);
