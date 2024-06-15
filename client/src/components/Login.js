@@ -1,13 +1,12 @@
 import { useRef, useState, useEffect } from 'react';
-import useAuth from '../hooks/useAuth';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 import axios from '../api/axios';
+import { useAuthContext } from '../utils/AuthContext';
 const LOGIN_URL = '/users/login';
 
 const Login = () => {
-    const { setAuth } = useAuth();
-
+    const { authenticatedUser, setAuthToken } = useAuthContext();
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || "/";
@@ -46,7 +45,7 @@ const Login = () => {
             console.log("roles:", roles); // Powinno wyświetlić "Admin"
             console.log("accessToken:", accessToken); // Powinno wyświetlić Twój token
 
-            setAuth({username, password, roles, accessToken });
+            setAuthToken(accessToken);
             setUser('');
             setPwd('');
             navigate(from, { replace: true });

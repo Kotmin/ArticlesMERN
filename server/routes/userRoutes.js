@@ -3,7 +3,8 @@ const { registerUser,
         loginUser } = require('../controllers/authController');
 const { changeRank, updateUser,
         getUsers, deleteUser,
-        softDeleteUser } = require('../controllers/userController');
+        softDeleteUser, 
+        getCurrentUser} = require('../controllers/userController');
 const auth = require('../middleware/authMiddleware');
 
 const worker = require('../middleware/workerMiddleware.js');
@@ -20,9 +21,7 @@ router.post('/login', loginUser);
 
 router.get('/', getUsers);
 
-router.get('/profile', auth, (req, res) => {
-  res.json({ message: `Hello ${req.user.id}, this is your profile.\nYou're: ${req.user.rank}` });
-});
+router.get('/profile', auth, getCurrentUser);
 
 
 // router.put('/rank',auth, worker, changeRank);

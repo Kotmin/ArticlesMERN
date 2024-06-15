@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../api/axios';
 import { Link } from 'react-router-dom';
+import LoginButton from './Logout';
 
 
 const GET_ARTICLES_URL = '/articles';
@@ -44,7 +45,7 @@ const Home = () => {
           <Link to="/">ArticleCont</Link>
           <div>
             <span>Hi, User</span>
-            <button>Log out</button>
+            <LoginButton />
           </div>
         </div>
       </header>

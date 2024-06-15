@@ -1,24 +1,18 @@
-import { useLocation, Navigate, Outlet } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+import { Navigate, Outlet } from "react-router-dom";
+import { useAuthContext } from "../utils/AuthContext";
 
 const RequireAuth = ({ allowedRoles }) => {
-    const { auth } = useAuth();
-    const location = useLocation();
+    const { authenticatedUser } = useAuthContext();
 
-    console.log(`Req role: ${allowedRoles},u: ${ auth.username },p ${ auth.password }, r: ${ auth.roles },t: ${ auth.accessToken } `)
-
-    
     console.log(allowedRoles);
-    // const userHasRequiredRole = auth?.roles?.some(role => allowedRoles.includes(role));
-    const userHasRequiredRole = allowedRoles.includes(auth.roles);
-    console.log(userHasRequiredRole);
-    console.log(auth.roles);
+    console.log(authenticatedUser.user.rank) // assumig that rank is the only role of the user
+    const userHasRequiredRole = allowedRoles.includes(authenticatedUser.user.rank);
     return (
         userHasRequiredRole
             ? <Outlet />
-            : auth?.user
-                ? <Navigate to="/unauthorized" state={{ from: location }} replace />
-                : <Navigate to="/login" state={{ from: location }} replace />
+            : authenticatedUser.user
+                ? <Navigate to="/unauthorized" replace />
+                : <Navigate to="/login" replace />
     );
 }
 
