@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import axios from '../api/axios';
+import { useNavigate } from 'react-router-dom';
+
+
+
 
 
 const ARTICLES_URL = '/articles';
@@ -16,6 +20,8 @@ const AddArticle = ({ history }) => {
     authors: []
   });
 
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -26,7 +32,7 @@ const AddArticle = ({ history }) => {
     console.log(form);
     axios.post(ARTICLES_URL, form)
       .then(response => {
-        history.push('/');
+        navigate('/');
       })
       .catch(error => {
         console.error('There was an error creating the article!', error);

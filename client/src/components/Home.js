@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import LoginButton from './Logout';
 
 import { useAuthContext } from "../utils/AuthContext";
+import { useNavigate } from 'react-router-dom';
 
 
 const GET_ARTICLES_URL = '/articles';
@@ -18,6 +19,7 @@ const Home = () => {
   const { authenticatedUser, setAuthToken } = useAuthContext();
 
   // console.log(authenticatedUser.user.username);
+  
 
 
   let config = {};
