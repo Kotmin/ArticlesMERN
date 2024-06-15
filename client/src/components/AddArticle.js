@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,23 +7,73 @@ import { useNavigate } from 'react-router-dom';
 
 
 const ARTICLES_URL = '/articles';
-
+const CATEGORIES_URL = '/categories';
+const CURRENT_USER_URL = '/profile';
 const AddArticle = ({ history }) => {
-  const [form, setForm] = useState({
-    title: '',
-    header: '',
-    subheader: '',
-    description: '',
-    category: '',
-    articlePath: '',
-    thumbnailPath: '',
-    authors: []
-  });
+const [form, setForm] = useState({
+  title: '',
+  header: '',
+  subheader: '',
+  description: '',
+  category: '',
+  articlePath: '',
+  thumbnailPath: '',
+  authors: []
+});
+const [categories, setCategories] = useState([]);
+const [currentUser, setCurrentUser] = useState(null);
+const navigate = useNavigate();
 
-  const navigate = useNavigate();
+useEffect(() => {
+  // Fetch categories
+  axios.get(CATEGORIES_URL)
+    .then(response => {
+      setCategories(response.data);
+    })
+    .catch(error => {
+      console.error('There was an error fetching the categories!', error);
+    });
+
+  // Fetch current user
+  axios.get(CURRENT_USER_URL)
+    .then(response => {
+      setCurrentUser(response.data._id);
+      setForm(prevForm => ({
+        ...prevForm,
+        authors: [response.data._id]
+      }));
+    })
+    .catch(error => {
+      console.error('There was an error fetching the current user!', error);
+    });
+}, []);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleAddAuthor = () => {
+    setForm(prevForm => ({
+      ...prevForm,
+      authors: [...prevForm.authors, '']
+    }));
+  };
+
+  const handleRemoveAuthor = (index) => {
+    setForm(prevForm => {
+      const authors = [...prevForm.authors];
+      authors.splice(index, 1);
+      return { ...prevForm, authors };
+    });
+  };
+
+  const handleAuthorChange = (e, index) => {
+    const { value } = e.target;
+    setForm(prevForm => {
+      const authors = [...prevForm.authors];
+      authors[index] = value;
+      return { ...prevForm, authors };
+    });
   };
 
   const handleSubmit = (e) => {
@@ -59,7 +109,12 @@ const AddArticle = ({ history }) => {
       </div>
       <div>
         <label>Category:</label>
-        <input type="text" name="category" value={form.category} onChange={handleChange} required />
+        <select name="category" value={form.category} onChange={handleChange} required>
+          <option value="">Select Category</option>
+          {categories.map(category => (
+            <option key={category._id} value={category._id}>{category.name}</option>
+          ))}
+        </select>
       </div>
       <div>
         <label>Article Path:</label>
@@ -71,7 +126,20 @@ const AddArticle = ({ history }) => {
       </div>
       <div>
         <label>Authors:</label>
-        <input type="text" name="authors" value={form.authors} onChange={handleChange} required />
+        {form.authors.map((author, index) => (
+          <div key={index}>
+            <input
+              type="text"
+              value={author}
+              onChange={(e) => handleAuthorChange(e, index)}
+              required
+            />
+            {index > 0 && (
+              <button type="button" onClick={() => handleRemoveAuthor(index)}>Remove</button>
+            )}
+          </div>
+        ))}
+        <button type="button" onClick={handleAddAuthor}>Add Author</button>
       </div>
       <button type="submit">Submit</button>
     </form>
