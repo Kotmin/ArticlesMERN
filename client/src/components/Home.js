@@ -3,6 +3,8 @@ import axios from '../api/axios';
 import { Link } from 'react-router-dom';
 import LoginButton from './Logout';
 
+import { useAuthContext } from "../utils/AuthContext";
+
 
 const GET_ARTICLES_URL = '/articles';
 
@@ -11,7 +13,11 @@ const Home = () => {
   const [categories, setCategories] = useState([]);
   const [articles, setArticles] = useState([]);
   const [recentArticles, setRecentArticles] = useState([]);
-  const userId = "loggedUserId"; 
+  const userId = ""; 
+
+  const { authenticatedUser, setAuthToken } = useAuthContext();
+
+  console.log(authenticatedUser.user.username);
 
   useEffect(() => {
     axios.get(GET_ARTICLES_URL).then(response => {
@@ -44,7 +50,8 @@ const Home = () => {
         <div>
           <Link to="/">ArticleCont</Link>
           <div>
-            <span>Hi, User</span>
+            {/* <span>Hi, User</span> */}
+            <span>{ authenticatedUser.user ? `Hi, ${authenticatedUser.user.username}`:""}</span>
             <LoginButton />
           </div>
         </div>
