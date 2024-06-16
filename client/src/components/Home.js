@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import CategoryControlList from './CategoryControl';
+
 
 const GET_ARTICLES_URL = '/articles';
 const CATEGORIES_URL = '/categories';
@@ -49,9 +49,7 @@ const Home = () => {
     axios.get(GET_ARTICLES_URL, config).then(response => {
       const articles = response.data;
 
-      // const draftArticles = articles.filter(article => article.status === 'draft');
-      // console.log(draftArticles);
-
+ 
       const categoriesMap = {};
 
       articles.forEach(article => {
@@ -65,9 +63,7 @@ const Home = () => {
       setArticles(articles);
     });
 
-    // axios.get('/api/articles?sort=-publishedAt&limit=3').then(response => {
-    //   setRecentArticles(response.data);
-    // });
+
   }, [loading]);
 
   const handleViewChange = (newView) => {
@@ -102,18 +98,7 @@ const Home = () => {
         {authenticatedUser.user && authenticatedUser.user.rank === "Admin" && (
           <CategoryControlList />
         )}
-        {/* <aside>
-          <h3>Recent publications</h3>
-          {recentArticles.map(article => (
-            <div key={article._id}>
-              <p>{article.title}</p>
-              <p>{article.header}</p>
-              <p>{article.subheader}</p>
-              <p>{article.description}</p>
-              <p>Author: {article.authors.map(author => author.username).join(', ')}</p>
-            </div>
-          ))}
-        </aside> */}
+
       </main>
       <ToastContainer />
     </div>
