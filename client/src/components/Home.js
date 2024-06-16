@@ -140,10 +140,10 @@ const CategoryList = ({ categories, userId }) => {
           <ul>
             {articles.map(article => (
               <li key={article._id}>
-                <Link to={`/details/${article._id}`}>{article.title}</Link>
-                <Link to={`/details/${article._id}`}>{article.subheader}</Link>
-                <Link to={`/details/${article._id}`}> {article.description}</Link>
-                <Link to={`/details/${article._id}`}> {article.authors.map(function (item){
+                <Link to={`/a/${article._id}`}>{article.title}</Link>
+                <Link to={`/a/${article._id}`}>{article.subheader}</Link>
+                <Link to={`/a/${article._id}`}> {article.description}</Link>
+                <Link to={`/a/${article._id}`}> {article.authors.map(function (item){
                                       return item["username"]
                                     }).toString()}</Link>
                 

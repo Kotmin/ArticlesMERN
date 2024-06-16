@@ -16,6 +16,8 @@ import Register from './components/Register';
 import Login from './components/Login';
 import Users from './components/Users';
 
+import Article from "./components/Article";
+
 
 import AddArticle from './components/addArticleFormik';
 import EditArticle from "./components/editArticle";
@@ -38,6 +40,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Home />} />
+        <Route path="/a/:article_id" element={<Article />} />
         <Route path="/unauthorized" element={<h1>Unauthorized</h1>} />
         <Route element={<ProtectRoute />}>
           {/* Here we can add routes for regular user */}
