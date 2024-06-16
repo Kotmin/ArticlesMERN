@@ -105,6 +105,9 @@ const ArticleDetail = () => {
 
   return (
     <div>
+      <p>
+      <Link to="/">Home</Link>
+      </p>
       <h1>{article.title}</h1>
       {article.thumbnailPath && (
         <img
