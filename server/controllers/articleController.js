@@ -3,27 +3,6 @@ const Category = require('../models/Category');
 const User = require('../models/User');
 const validator = require('validator');
 
-// Get all articles
-// exports.getAllArticles = async (req, res) => {
-//   try {
-//     const query = { status: 'published' };
-//     const articles = await Article.find(query).populate('category').populate({
-//       path: 'authors',
-//       select: '_id username profileDescription articles',
-//       populate: [
-//         {
-//           path:'articles',
-//           select: '_id title'
-//         }
-//       ]
-//     });
-//     res.json(articles);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
-
-
 
 exports.getAllArticles = async (req, res) => {
   try {
@@ -64,53 +43,6 @@ exports.getAllArticles = async (req, res) => {
 };
 
 
-
-// // Get article by ID
-// exports.getArticleById = async (req, res) => {
-//   try {
-
-    
-//     const article = await Article.findById(req.params.id).populate('category')
-//     .populate('authors',
-//     '_id username profileDescription articles'
-//     );
-//     if (!article) return res.status(404).json({ message: 'Article not found' });
-//     res.json(article);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
-
-// exports.getArticleById = async (req, res) => {
-//   try {
-//     const article = await Article.findById(req.params.id).populate('category').populate({
-//       path: 'authors',
-//       select: '_id username profileDescription articles'
-//     });
-//     if (!article) return res.status(404).json({ message: 'Article not found' });
-
-//     // Authorization check
-//     if (req.user) {
-//       if (
-//         req.user.rank === 'Worker' ||
-//         req.user.rank === 'Moderator' ||
-//         req.user.rank === 'Admin' ||
-//         article.authors.some(author => author._id.equals(req.user._id)) ||
-//         article.status === 'published'
-//       ) {
-//         return res.json(article);
-//       } else {
-//         return res.status(403).json({ message: 'You do not have permission to view this article' });
-//       }
-//     } else if (article.status === 'published') {
-//       return res.json(article);
-//     } else {
-//       return res.status(403).json({ message: 'You do not have permission to view this article' });
-//     }
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
 
 
 exports.getArticleById = async (req, res) => {
@@ -243,12 +175,6 @@ exports.updateArticle = async (req, res) => {
       await article.save();
     }
 
-    // if (header) {
-    //   article.header = header;
-    //   await article.save();
-    // }
-
-    // await article.save();
 
     res.json(article);
   } catch (error) {
