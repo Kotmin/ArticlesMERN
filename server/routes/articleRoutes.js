@@ -4,7 +4,8 @@ const {
   getArticleById,
   createArticle,
   updateArticle,
-  deleteArticle
+  deleteArticle,
+  deleteAllArticles,
 } = require('../controllers/articleController');
 const auth = require('../middleware/authMiddleware');
 const owner = require('../middleware/ownershipArticleMiddleware');
@@ -20,7 +21,8 @@ const router = express.Router();
 
 router.route('/')
   .get(optionalAuth,getAllArticles)
-  .post(createArticle); 
+  .post(createArticle)
+  .delete(deleteAllArticles);
 
 router.route('/:id')
   .get(getArticleById)

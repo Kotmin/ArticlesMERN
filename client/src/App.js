@@ -23,6 +23,11 @@ import AddArticle from './components/addArticleFormik';
 import EditArticle from "./components/editArticle";
 import DeleteArticle from "./components/deleteArticle";
 
+
+import AddCategory from "./components/addCategory";
+import EditCategory from "./components/editCategory";
+import DeleteCategory from "./components/deleteCategory";
+
 import RequireAuth from './components/RequireAuth';
 import { AuthProvider } from "./utils/AuthContext"
 import ProtectRoute from "./utils/ProtectRoute";
@@ -52,6 +57,9 @@ function App() {
 
           <Route element={<RequireAuth allowedRoles={["Admin"]} />}>
             <Route path="/users" element={<Users />} />
+            <Route path="/add_category" element={<AddCategory />} /> 
+            <Route path="/edit_category/:category_id" element={<EditCategory />} />
+            <Route path="/delete_category/:category_id" element={<DeleteCategory />} />
           </Route>
         </Route>
       </Routes>

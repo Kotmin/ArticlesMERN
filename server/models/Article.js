@@ -66,4 +66,28 @@ articleSchema.pre('findOneAndUpdate', function (next) {
   next();
 });
 
+
+
+articleSchema.pre('findOneAndDelete', async function (next) {
+  const article = await this.model.findOne(this.getQuery());
+  if (article) {
+    await mongoose.model('User').updateMany(
+      { _id: { $in: article.authors } },
+      { $pull: { articles: article._id } }
+    );
+  }
+  next();
+});
+
+
+articleSchema.post('findOneAndDelete', async function (doc) {
+  if (doc) {
+    await mongoose.model('User').updateMany(
+      { _id: { $in: doc.authors } },
+      { $pull: { articles: doc._id } }
+    );
+  }
+});
+
+
 module.exports = mongoose.model('Article', articleSchema);

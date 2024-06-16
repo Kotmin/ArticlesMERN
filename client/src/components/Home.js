@@ -2,21 +2,16 @@ import React, { useState, useEffect } from 'react';
 import axios from '../api/axios';
 import { Link } from 'react-router-dom';
 import LoginButton from './Logout';
-
 import { useAuthContext } from "../utils/AuthContext";
 import { useNavigate } from 'react-router-dom';
-
-
 import { useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import CategoryControlList from './CategoryControl';
 
 const GET_ARTICLES_URL = '/articles';
 
 const Home = () => {
-
-
   const location = useLocation();
 
   useEffect(() => {
@@ -37,23 +32,19 @@ const Home = () => {
   const [categories, setCategories] = useState([]);
   const [articles, setArticles] = useState([]);
   const [recentArticles, setRecentArticles] = useState([]);
-  const userId = ""; 
+  const userId = "";
 
   const { authenticatedUser, setAuthToken, loading } = useAuthContext();
 
-  // console.log(authenticatedUser.user.username);
-  
-
-
   let config = {};
-  if(authenticatedUser.user) {
-    const aT = localStorage.getItem("accessToken"); 
-     config = {
+  if (authenticatedUser.user) {
+    const aT = localStorage.getItem("accessToken");
+    config = {
       headers: { Authorization: `Bearer ${aT}` }
     };
   }
-  useEffect(() => {
 
+  useEffect(() => {
     axios.get(GET_ARTICLES_URL, config).then(response => {
       const articles = response.data;
 
@@ -88,7 +79,7 @@ const Home = () => {
         <div>
           <Link to="/">ArticleCont</Link>
           <div>
-            <span>{ authenticatedUser.user ? `Hi, ${authenticatedUser.user.username}`:""}</span>
+            <span>{authenticatedUser.user ? `Hi, ${authenticatedUser.user.username}` : ""}</span>
             <LoginButton />
           </div>
         </div>
@@ -107,6 +98,9 @@ const Home = () => {
             <ArticleList articles={articles} userId={authenticatedUser.user?._id} />
           )}
         </div>
+        {authenticatedUser.user && authenticatedUser.user.rank === "Admin" && (
+          <CategoryControlList />
+        )}
         <aside>
           <h3>Recent publications</h3>
           {recentArticles.map(article => (
@@ -126,15 +120,9 @@ const Home = () => {
 };
 
 const CategoryList = ({ categories, userId }) => {
-
-  // var author_names = article.authors.map(function (item){
-  //   return item["username"]
-  // })
-
   return (
     <div>
       {categories.map(([category, articles], index) => (
-        
         <div key={index}>
           <h3>{index + 1}. {category}</h3>
           <ul>
@@ -142,13 +130,9 @@ const CategoryList = ({ categories, userId }) => {
               <li key={article._id}>
                 <Link to={`/a/${article._id}`}>{article.title}</Link>
                 <Link to={`/a/${article._id}`}>{article.subheader}</Link>
-                <Link to={`/a/${article._id}`}> {article.description}</Link>
-                <Link to={`/a/${article._id}`}> {article.authors.map(function (item){
-                                      return item["username"]
-                                    }).toString()}</Link>
-                
-                {/* <Link to={`/details/${article._id}`}>{article.subheader}</Link> */}
-                {article.authors.map(function(item){ return item["_id"]}).includes(userId) && (
+                <Link to={`/a/${article._id}`}>{article.description}</Link>
+                <Link to={`/a/${article._id}`}>{article.authors.map(item => item["username"]).toString()}</Link>
+                {article.authors.map(item => item["_id"]).includes(userId) && (
                   <>
                     <Link to={`/edit_article/${article._id}`}><button>Edit</button></Link>
                     <Link to={`/delete_article/${article._id}`}><button>Delete</button></Link>
@@ -171,9 +155,7 @@ const ArticleList = ({ articles, userId }) => {
         <li key={article._id}>
           <Link to={`/details/${article._id}`}>{article.title}</Link>
           <Link to={`/details/${article._id}`}>{article.subheader}</Link>
-
           <Link to={`/details/${article._id}`}>{article.authors}</Link>
-
           {article.authors.includes(userId) && (
             <>
               <Link to={`/edit/${article._id}`}><button>Edit</button></Link>

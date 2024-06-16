@@ -192,3 +192,14 @@ exports.deleteArticle = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+// Delete all articles
+exports.deleteAllArticles = async (req, res) => {
+  try {
+    await Article.deleteMany({});
+    res.json({ message: 'All articles deleted' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
