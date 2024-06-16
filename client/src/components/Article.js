@@ -15,12 +15,29 @@ const ArticleDetail = () => {
 
   const [article, setArticle] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [authorArticles, setAuthorArticles] = useState({});
 
   useEffect(() => {
     const fetchArticle = async () => {
       try {
         const response = await axios.get(`${ARTICLES_URL}/${article_id}`);
         setArticle(response.data);
+
+        // Fetch additional data for each author
+        const articlesData = await Promise.all(response.data.authors.map(async (author) => {
+          const articleDetails = await Promise.all(author.articles.slice(0, 5).map(async (articleId) => {
+            const res = await axios.get(`${ARTICLES_URL}/${articleId}`);
+            return res.data;
+          }));
+          return { authorId: author._id, articles: articleDetails };
+        }));
+
+        const articlesMap = {};
+        articlesData.forEach(({ authorId, articles }) => {
+          articlesMap[authorId] = articles;
+        });
+
+        setAuthorArticles(articlesMap);
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching article:', error);
@@ -89,16 +106,17 @@ const ArticleDetail = () => {
       {article.authors.map(author => (
         <div key={author._id}>
           <p>{author.username}</p>
-          <p>{author.profileDescription}</p>
-          <ul>
-            {author.articles.slice(0, 5).map(a => (
-              <li key={a._id}>
-                <Link to={`/article/${a._id}`}>{a._id}</Link>
-              </li>
-            ))}
-
-            <li>{author.articles}</li>
-          </ul>
+          {authorArticles[author._id] ? (
+            <ul>
+              {authorArticles[author._id].map(a => (
+                <li key={a._id}>
+                  <Link to={`/a/${a._id}`}>{a.title}</Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>Loading articles...</p>
+          )}
         </div>
       ))}
       {authenticatedUser.user && article.authors.map(a => a._id).includes(authenticatedUser.user._id) && (
