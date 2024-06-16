@@ -89,12 +89,15 @@ const ArticleDetail = () => {
       {article.authors.map(author => (
         <div key={author._id}>
           <p>{author.username}</p>
+          <p>{author.profileDescription}</p>
           <ul>
             {author.articles.slice(0, 5).map(a => (
               <li key={a._id}>
-                <Link to={`/article/${a._id}`}>{a.title}</Link>
+                <Link to={`/article/${a._id}`}>{a._id}</Link>
               </li>
             ))}
+
+            <li>{author.articles}</li>
           </ul>
         </div>
       ))}
