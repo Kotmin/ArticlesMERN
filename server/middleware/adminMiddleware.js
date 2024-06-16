@@ -4,8 +4,11 @@ const User = require('../models/User');
 const adminMiddleware = async (req, res, next) => {
   try {
     const { userId } = req.body; 
-    if (!userId) {
-      return res.status(400).json({ message: 'User not logged' });
+    // console.log(userId);
+    console.log("----");
+
+    if (!req.user) {
+      return res.status(400).json({ message: `User not logged ---${req.user.id}` });
     }
 
     if (req.user.rank !== 'Admin') {
