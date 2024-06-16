@@ -3,17 +3,16 @@ import { Formik, Field, Form, FieldArray } from 'formik';
 import * as Yup from 'yup';
 import axios from '../api/axios';
 import { useNavigate } from 'react-router-dom';
-
-
 import { useAuthContext } from '../utils/AuthContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ARTICLES_URL = '/articles';
 const CATEGORIES_URL = '/categories';
 const CURRENT_USER_URL = '/users/profile';
 
 const AddArticle = () => {
-
-const { authenticatedUser } = useAuthContext();
+  const { authenticatedUser } = useAuthContext();
 
   const [categories, setCategories] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
@@ -23,22 +22,16 @@ const { authenticatedUser } = useAuthContext();
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch categories
         const categoriesResponse = await axios.get(CATEGORIES_URL);
         setCategories(categoriesResponse.data);
 
-        // Fetch current user
-        const currentUserResponse = await axios.get(CURRENT_USER_URL,
-            {
-                headers: {
-                  Authorization: `Bearer ${authenticatedUser.token}`,
-                },
-            }
-        );
+        const currentUserResponse = await axios.get(CURRENT_USER_URL, {
+          headers: {
+            Authorization: `Bearer ${authenticatedUser.token}`,
+          },
+        });
 
-        // console.log(json(authenticatedUser));
         setCurrentUser(currentUserResponse.data._id);
-
         setIsLoading(false);
       } catch (error) {
         console.error('There was an error fetching the data!', error);
@@ -47,7 +40,7 @@ const { authenticatedUser } = useAuthContext();
     };
 
     fetchData();
-  }, []);
+  }, [authenticatedUser.token]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -61,7 +54,7 @@ const { authenticatedUser } = useAuthContext();
     category: '',
     articlePath: '',
     thumbnailPath: '',
-    authors: [currentUser] // Initialize with the current user ID if available
+    authors: [currentUser]
   };
 
   const validationSchema = Yup.object({
@@ -75,17 +68,38 @@ const { authenticatedUser } = useAuthContext();
     authors: Yup.array().of(Yup.string().required('Required'))
   });
 
-  const handleSubmit = (values, { setSubmitting }) => {
-    axios.post(ARTICLES_URL, values)
-      .then(response => {
-        navigate('/');
-      })
-      .catch(error => {
-        console.error('There was an error creating the article!', error);
-      })
-      .finally(() => {
-        setSubmitting(false);
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      const response = await axios.post(ARTICLES_URL, values, {
+        headers: {
+          Authorization: `Bearer ${authenticatedUser.token}`,
+        },
       });
+      if (response.status === 201) {
+        toast.success('Article created successfully!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        navigate('/');
+      }
+    } catch (error) {
+      toast.error(`Error: ${error.response.data.message}`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -96,23 +110,27 @@ const { authenticatedUser } = useAuthContext();
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ values, isSubmitting }) => (
+        {({ values, errors, touched, isSubmitting }) => (
           <Form>
             <div>
               <label>Title:</label>
               <Field type="text" name="title" />
+              {errors.title && touched.title ? <div style={{ color: 'red' }}>{errors.title}</div> : null}
             </div>
             <div>
               <label>Header:</label>
               <Field type="text" name="header" />
+              {errors.header && touched.header ? <div style={{ color: 'red' }}>{errors.header}</div> : null}
             </div>
             <div>
               <label>Subheader:</label>
               <Field type="text" name="subheader" />
+              {errors.subheader && touched.subheader ? <div style={{ color: 'red' }}>{errors.subheader}</div> : null}
             </div>
             <div>
               <label>Description:</label>
               <Field as="textarea" name="description" />
+              {errors.description && touched.description ? <div style={{ color: 'red' }}>{errors.description}</div> : null}
             </div>
             <div>
               <label>Category:</label>
@@ -122,14 +140,17 @@ const { authenticatedUser } = useAuthContext();
                   <option key={category._id} value={category._id}>{category.name}</option>
                 ))}
               </Field>
+              {errors.category && touched.category ? <div style={{ color: 'red' }}>{errors.category}</div> : null}
             </div>
             <div>
               <label>Article Path:</label>
               <Field type="text" name="articlePath" />
+              {errors.articlePath && touched.articlePath ? <div style={{ color: 'red' }}>{errors.articlePath}</div> : null}
             </div>
             <div>
               <label>Thumbnail Path:</label>
               <Field type="text" name="thumbnailPath" />
+              {errors.thumbnailPath && touched.thumbnailPath ? <div style={{ color: 'red' }}>{errors.thumbnailPath}</div> : null}
             </div>
             <div>
               <label>Authors:</label>
@@ -139,18 +160,22 @@ const { authenticatedUser } = useAuthContext();
                     {values.authors.map((author, index) => (
                       <div key={index}>
                         <Field name={`authors[${index}]`} />
-                        <button type="button" onClick={() => remove(index)}>Remove</button>
+                        {index !== 0 && (
+                          <button type="button" onClick={() => remove(index)}>Remove</button>
+                        )}
                       </div>
                     ))}
                     <button type="button" onClick={() => push('')}>Add Author</button>
                   </>
                 )}
               </FieldArray>
+              {errors.authors && touched.authors ? <div style={{ color: 'red' }}>{errors.authors}</div> : null}
             </div>
             <button type="submit" disabled={isSubmitting}>Submit</button>
           </Form>
         )}
       </Formik>
+      <ToastContainer />
     </div>
   );
 };
