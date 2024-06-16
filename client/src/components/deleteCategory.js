@@ -36,12 +36,21 @@ const DeleteCategory = () => {
 
     const checkCategoryArticles = async () => {
       try {
-        const response = await axios.get(`/articles?category=${category_id}`, {
-          headers: {
-            Authorization: `Bearer ${authenticatedUser.token}`,
-          },
-        });
-        setHasArticles(response.data.length > 0);
+        const response = await axios.get(`/articles`, {
+            headers: {
+              Authorization: `Bearer ${authenticatedUser.token}`,
+            },
+          });
+
+          const articles = response.data;
+          articles.forEach(article => {
+            if (article.category._id === category_id) {
+                setHasArticles(true);
+            }
+          });
+
+
+        // setHasArticles(response.data.length > 0);
       } catch (error) {
         console.error('Error checking category articles:', error);
       }

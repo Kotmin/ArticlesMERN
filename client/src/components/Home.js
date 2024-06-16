@@ -7,9 +7,10 @@ import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import CategoryControlList from './CategoryControl';
+// import CategoryControlList from './CategoryControl';
 
 const GET_ARTICLES_URL = '/articles';
+const CATEGORIES_URL = '/categories';
 
 const Home = () => {
   const location = useLocation();
@@ -48,7 +49,7 @@ const Home = () => {
     axios.get(GET_ARTICLES_URL, config).then(response => {
       const articles = response.data;
 
-      const draftArticles = articles.filter(article => article.status === 'draft');
+      // const draftArticles = articles.filter(article => article.status === 'draft');
       // console.log(draftArticles);
 
       const categoriesMap = {};
@@ -101,7 +102,7 @@ const Home = () => {
         {authenticatedUser.user && authenticatedUser.user.rank === "Admin" && (
           <CategoryControlList />
         )}
-        <aside>
+        {/* <aside>
           <h3>Recent publications</h3>
           {recentArticles.map(article => (
             <div key={article._id}>
@@ -112,7 +113,7 @@ const Home = () => {
               <p>Author: {article.authors.map(author => author.username).join(', ')}</p>
             </div>
           ))}
-        </aside>
+        </aside> */}
       </main>
       <ToastContainer />
     </div>
@@ -165,6 +166,97 @@ const ArticleList = ({ articles, userId }) => {
         </li>
       ))}
     </ul>
+  );
+};
+
+
+
+const CategoryControlList = () => {
+  const { authenticatedUser } = useAuthContext();
+  const navigate = useNavigate();
+  const [categories, setCategories] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(CATEGORIES_URL, {
+          headers: {
+            Authorization: `Bearer ${authenticatedUser.token}`,
+          },
+        });
+        setCategories(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, [authenticatedUser.token]);
+
+  const handleDelete = async (category_id) => {
+    try {
+      await axios.delete(`${CATEGORIES_URL}/${category_id}`, {
+        headers: {
+          Authorization: `Bearer ${authenticatedUser.token}`,
+        },
+      });
+      toast.info('Category deleted successfully!', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      setCategories(categories.filter(category => category._id !== category_id));
+    } catch (error) {
+      console.error('Error deleting category:', error);
+      toast.error(`Error: ${error.response.data.message}`, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div>
+      <h2>Manage Categories</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Category Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {categories.map(category => (
+            <tr key={category._id}>
+              <td>
+                <Link to={`/edit_category/${category._id}`}>{category.name}</Link>
+              </td>
+              <td>
+                <Link to={`/delete_category/${category._id}`}>Delete</Link>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <Link to="/add_category"><button>Add Category</button></Link>
+    
+    </div>
   );
 };
 

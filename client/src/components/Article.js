@@ -123,17 +123,21 @@ const ArticleDetail = () => {
       {article.authors.map(author => (
         <div key={author._id}>
           <p>{author.username}</p>
-          {authorArticles[author._id] && authorArticles[author._id].length > 0 ? (
-            <ul>
-              {authorArticles[author._id].map(a => (
-                <li key={a._id}>
-                  <Link to={`/a/${a._id}`}>{a.title}</Link>
-                </li>
-              ))}
-            </ul>
-          ) : (
+
+          {author.articles.length >0 ? 
+          (
+          <ul>
+          {author.articles.slice(0, author.articles.length).map(a => (
+              <li key={a._id}>
+                <Link to={`/a/${a._id}`}>{a.title}</Link>
+              </li>
+            ))}
+        </ul>
+
+          ): (
             <p>{errorLoadingAuthorArticles ? 'Error loading articles' : 'No accessible articles'}</p>
           )}
+
         </div>
       ))}
       {authenticatedUser.user && article.authors.map(a => a._id).includes(authenticatedUser.user._id) && (
