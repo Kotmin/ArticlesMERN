@@ -40,11 +40,13 @@ const ArticleDetail = () => {
           try {
             const articleDetails = await Promise.all(author.articles.slice(0, 5).map(async (articleId) => {
               const res = await axios.get(`${ARTICLES_URL}/${articleId}`,config);
+              if (res.data.length === 0) navigate('/missing');
               return res.data;
             }));
             return { authorId: author._id, articles: articleDetails };
           } catch (error) {
             console.error(`Error fetching articles for author ${author._id}:`, error);
+            // navigate('/missing');
             return { authorId: author._id, articles: [] };
           }
         }));
@@ -59,6 +61,7 @@ const ArticleDetail = () => {
       } catch (error) {
         console.error('Error fetching article:', error);
         setIsLoading(false);
+        navigate('/missing');
       }
     };
 

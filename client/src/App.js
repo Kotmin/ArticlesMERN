@@ -32,7 +32,10 @@ import RequireAuth from './components/RequireAuth';
 import { AuthProvider } from "./utils/AuthContext"
 import ProtectRoute from "./utils/ProtectRoute";
 
- 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+ import Missing from "./components/Missing";
 
 function App() {
   return (
@@ -60,10 +63,14 @@ function App() {
             <Route path="/add_category" element={<AddCategory />} /> 
             <Route path="/edit_category/:category_id" element={<EditCategory />} />
             <Route path="/delete_category/:category_id" element={<DeleteCategory />} />
+      
           </Route>
         </Route>
+        <Route path="*" element={<Missing />} />
       </Routes>
     </BrowserRouter>
+
+    <ToastContainer />
     </AuthProvider>
     </div>
   );
@@ -71,17 +78,3 @@ function App() {
 
 export default App;
 
-// function Users() {
-//   return (
-//     <div>
-//       <nav>
-//         <Link to="me">My Profile</Link>
-//       </nav>
-
-//       <Routes>
-//         <Route path=":id" element={<UserProfile />} />
-//         <Route path="me" element={<OwnUserProfile />} />
-//       </Routes>
-//     </div>
-//   );
-// }
