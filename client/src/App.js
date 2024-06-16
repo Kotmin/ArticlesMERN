@@ -18,6 +18,8 @@ import Users from './components/Users';
 
 
 import AddArticle from './components/addArticleFormik';
+import EditArticle from "./components/editArticle";
+import DeleteArticle from "./components/deleteArticle";
 
 import RequireAuth from './components/RequireAuth';
 import { AuthProvider } from "./utils/AuthContext"
@@ -41,6 +43,8 @@ function App() {
           {/* Here we can add routes for regular user */}
           <Route element={<RequireAuth allowedRoles={["Regular","Admin"]} />}>
             <Route path="/addarticle" element={<AddArticle />} /> 
+            <Route path="/edit_article/:article_id" element={<EditArticle />} />
+            <Route path="/delete_article/:article_id" element={<DeleteArticle />} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={["Admin"]} />}>

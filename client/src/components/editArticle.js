@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Formik, Field, Form, FieldArray } from 'formik';
 import * as Yup from 'yup';
 import axios from '../api/axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuthContext } from '../utils/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,11 +11,13 @@ const ARTICLES_URL = '/articles';
 const CATEGORIES_URL = '/categories';
 const CURRENT_USER_URL = '/users/profile';
 
-const AddArticle = () => {
+const EditArticle = () => {
   const { authenticatedUser } = useAuthContext();
+  const { article_id } = useParams(); 
 
   const [categories, setCategories] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
+  const [article, setArticle] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -32,6 +34,14 @@ const AddArticle = () => {
         });
 
         setCurrentUser(currentUserResponse.data._id);
+
+        const articleResponse = await axios.get(`${ARTICLES_URL}/${article_id}`, {
+          headers: {
+            Authorization: `Bearer ${authenticatedUser.token}`,
+          },
+        });
+
+        setArticle(articleResponse.data);
         setIsLoading(false);
       } catch (error) {
         console.error('There was an error fetching the data!', error);
@@ -40,21 +50,21 @@ const AddArticle = () => {
     };
 
     fetchData();
-  }, [authenticatedUser.token]);
+  }, [authenticatedUser.token, article_id]);
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
   const initialValues = {
-    title: '',
-    header: '',
-    subheader: '',
-    description: '',
-    category: '',
-    articlePath: '',
-    thumbnailPath: '',
-    authors: [currentUser]
+    title: article.title || '',
+    header: article.header || '',
+    subheader: article.subheader || '',
+    description: article.description || '',
+    category: article.category._id || '',
+    articlePath: article.articlePath || '',
+    thumbnailPath: article.thumbnailPath || '',
+    authors: article.authors.map(author => author._id) || [currentUser],
   };
 
   const validationSchema = Yup.object({
@@ -65,19 +75,19 @@ const AddArticle = () => {
     category: Yup.string().required('Required'),
     articlePath: Yup.string().required('Required'),
     thumbnailPath: Yup.string().required('Required'),
-    authors: Yup.array().of(Yup.string().required('Required'))
+    authors: Yup.array().of(Yup.string().required('Required')),
   });
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      const response = await axios.post(ARTICLES_URL, values, {
+      const response = await axios.put(`${ARTICLES_URL}/${article_id}`, values, {
         headers: {
           Authorization: `Bearer ${authenticatedUser.token}`,
         },
       });
-      if (response.status === 201) {
-        toast.success('Article created successfully!', {
-          position: "top-right",
+      if (response.status === 200) {
+        toast.success('Article updated successfully!', {
+          position: 'top-right',
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -86,11 +96,11 @@ const AddArticle = () => {
           progress: undefined,
         });
 
-        navigate('/', { state: { successMessage: 'Article created successfully!' } });
+        navigate('/', { state: { successMessage: 'Article updated successfully!' } });
       }
     } catch (error) {
       toast.error(`Error: ${error.response.data.message}`, {
-        position: "top-right",
+        position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -105,7 +115,7 @@ const AddArticle = () => {
 
   return (
     <div>
-      <h1>Add Article</h1>
+      <h1>Edit Article</h1>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -172,7 +182,9 @@ const AddArticle = () => {
               </FieldArray>
               {errors.authors && touched.authors ? <div style={{ color: 'red' }}>{errors.authors}</div> : null}
             </div>
-            <button type="submit" disabled={isSubmitting}>Submit</button>
+            <button type="submit" disabled={isSubmitting}>
+              Update
+            </button>
           </Form>
         )}
       </Formik>
@@ -181,4 +193,4 @@ const AddArticle = () => {
   );
 };
 
-export default AddArticle;
+export default EditArticle;

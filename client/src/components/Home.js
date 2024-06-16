@@ -7,9 +7,32 @@ import { useAuthContext } from "../utils/AuthContext";
 import { useNavigate } from 'react-router-dom';
 
 
+import { useLocation } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 const GET_ARTICLES_URL = '/articles';
 
 const Home = () => {
+
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state && location.state.successMessage) {
+      toast.success(location.state.successMessage, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  }, [location.state]);
+
   const [view, setView] = useState('categories');
   const [categories, setCategories] = useState([]);
   const [articles, setArticles] = useState([]);
@@ -97,6 +120,7 @@ const Home = () => {
           ))}
         </aside>
       </main>
+      <ToastContainer />
     </div>
   );
 };
@@ -126,8 +150,8 @@ const CategoryList = ({ categories, userId }) => {
                 {/* <Link to={`/details/${article._id}`}>{article.subheader}</Link> */}
                 {article.authors.map(function(item){ return item["_id"]}).includes(userId) && (
                   <>
-                    <Link to={`/edit/${article._id}`}><button>Edit</button></Link>
-                    <button>Delete</button>
+                    <Link to={`/edit_article/${article._id}`}><button>Edit</button></Link>
+                    <Link to={`/delete_article/${article._id}`}><button>Delete</button></Link>
                   </>
                 )}
               </li>
