@@ -12,5 +12,5 @@ export default function LoginButton() {
 
     if(!authenticatedUser.user) 
         return <Link to='/login'>Login</Link>;
-    return <a href="#" onClick={handleLogout}>Logout</a>
+    return <a href="#"  onClick={handleLogout}>Logout</a>
 }

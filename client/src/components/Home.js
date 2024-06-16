@@ -83,7 +83,7 @@ const Home = () => {
       </header>
       <main>
         <div>
-          <Link to="/addarticle"><button>Add</button></Link>
+          <Link to="/addarticle"><button class="btn">Add</button></Link>
           {/* <button onClick={() => handleViewChange('categories')}>Categ</button> */}
           {/* <button onClick={() => handleViewChange('articles')}>Artic</button> */}
         </div>
@@ -159,8 +159,7 @@ const CategoryList = ({ categories, userId, userRank }) => {
             {articles.map(article => (
               <li key={article._id}>
                 <Link to={`/a/${article._id}`}>{article.title} </Link> 
-                {/* <Link to={`/a/${article._id}`}>{article.subheader}</Link> */}
-                {/* <Link to={`/a/${article._id}`}>{article.description}</Link> */}
+                
                 <Link to={`/a/${article._id}`}>{article.authors.map(item => item["username"]).toString()}</Link>
                 {article.authors.map(item => item["_id"]).includes(userId) && (
                   <>
@@ -288,7 +287,7 @@ const CategoryControlList = () => {
           ))}
         </tbody>
       </table>
-      <Link to="/add_category"><button>Add Category</button></Link>
+      <Link to="/add_category"><button class="btn">Add Category</button></Link>
     
     </div>
   );

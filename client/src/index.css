@@ -4,16 +4,23 @@
   --text-color: #000; 
   font-size: 62.5%;
   /*Z tym fontsize jest fajna sztuczka bo statystycznie najczesciej mamy fontsize 60 i to nam sie bedzie skalowalo ladnie*/
+
+  --link-color: #1a0dab;
+  --link-hover-color: #551a8b;
 }
 
 [data-theme="dark"] {
   --background-color: #3F3F3F;
   --text-color: #fff;
+  --link-color: #8ab4f8; 
+  --link-hover-color: #bb86fc;
 }
 
 [data-theme="light"] {
   --background-color: #fff;
   --text-color: #000; 
+  --link-color: #1a0dab;
+  --link-hover-color: #551a8b;
 }
 
 body {
@@ -48,6 +55,13 @@ code {
   align-items: center;
   min-height: 100vh; 
   padding: 1rem 0.5rem;
+}
+main {
+  min-width: 60vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 1rem;
 }
 
 
@@ -190,6 +204,16 @@ li {
   btn:focus-visible {
     outline-offset: 0.5rem;
   }
+}
+
+a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--link-hover-color);
+  text-decoration: underline;
 }
 
 
