@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from '../api/axios';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{1,24}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[0-9]).{10,64}$/;
@@ -12,6 +12,7 @@ const REGISTER_URL = '/users/register';
 const Register = () => {
     const userRef = useRef();
     const errRef = useRef();
+    const navigate = useNavigate();
 
     const [username, setUser] = useState('');
     const [validName, setValidName] = useState(false);
@@ -94,7 +95,8 @@ const Register = () => {
                 <section>
                     <h1>Success!</h1>
                     <p>
-                        <a href="#">Sign In</a>
+                        {/* <a href="#">Sign In</a> */}
+                        <Link to={`/login`}><button>Sign In</button></Link>
                     </p>
                 </section>
             ) : (
