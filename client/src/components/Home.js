@@ -84,15 +84,15 @@ const Home = () => {
       <main>
         <div>
           <Link to="/addarticle"><button>Add</button></Link>
-          <button onClick={() => handleViewChange('categories')}>Categ</button>
-          <button onClick={() => handleViewChange('articles')}>Artic</button>
+          {/* <button onClick={() => handleViewChange('categories')}>Categ</button> */}
+          {/* <button onClick={() => handleViewChange('articles')}>Artic</button> */}
         </div>
-        <h2>{view === 'categories' ? 'Categories' : 'Articles'}</h2>
+        {/* <h2>{view === 'categories' ? 'Categories' : 'Articles'}</h2> */}
         <div style={{ overflowY: 'scroll', maxHeight: '400px' }}>
           {view === 'categories' ? (
-            <CategoryList categories={categories} userId={authenticatedUser.user?._id} />
+            <CategoryList categories={categories} userId={authenticatedUser.user?._id} userRank={authenticatedUser.user?.rank}  />
           ) : (
-            <ArticleList articles={articles} userId={authenticatedUser.user?._id} />
+            <ArticleList articles={articles} userId={authenticatedUser.user?._id} userRank={authenticatedUser.user?.rank} />
           )}
         </div>
         {authenticatedUser.user && authenticatedUser.user.rank === "Admin" && (
@@ -105,7 +105,51 @@ const Home = () => {
   );
 };
 
-const CategoryList = ({ categories, userId }) => {
+const CategoryList = ({ categories, userId, userRank }) => {
+
+  const { authenticatedUser } = useAuthContext();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleStatusChange = async (articleId, currentStatus) => {
+    setIsLoading(true);
+    try {
+      const newStatus = currentStatus === 'draft' ? 'published' : 'draft';
+      const response = await axios.put(
+        `${GET_ARTICLES_URL}/${articleId}`,
+        { status: newStatus },
+        {
+          headers: {
+            Authorization: `Bearer ${authenticatedUser.token}`,
+          },
+        }
+      );
+      toast.success(`Article ${newStatus === 'published' ? 'published' : 'hidden'} successfully!`, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      // Odświeżenie listy artykułów po udanej zmianie statusu
+      window.location.reload();
+    } catch (error) {
+      console.error(`Error changing status of article ${articleId}:`, error);
+      toast.error(`Error: ${error.response.data.message}`, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div>
       {categories.map(([category, articles], index) => (
@@ -114,15 +158,20 @@ const CategoryList = ({ categories, userId }) => {
           <ul>
             {articles.map(article => (
               <li key={article._id}>
-                <Link to={`/a/${article._id}`}>{article.title}</Link>
-                <Link to={`/a/${article._id}`}>{article.subheader}</Link>
-                <Link to={`/a/${article._id}`}>{article.description}</Link>
+                <Link to={`/a/${article._id}`}>{article.title} </Link> 
+                {/* <Link to={`/a/${article._id}`}>{article.subheader}</Link> */}
+                {/* <Link to={`/a/${article._id}`}>{article.description}</Link> */}
                 <Link to={`/a/${article._id}`}>{article.authors.map(item => item["username"]).toString()}</Link>
                 {article.authors.map(item => item["_id"]).includes(userId) && (
                   <>
                     <Link to={`/edit_article/${article._id}`}><button>Edit</button></Link>
                     <Link to={`/delete_article/${article._id}`}><button>Delete</button></Link>
                   </>
+                )}
+                {userRank ==="Admin" && (
+                   <button onClick={() => handleStatusChange(article._id, article.status)}>
+                   {article.status === 'draft' ? 'Publish' : 'Hide'}
+                 </button>
                 )}
               </li>
             ))}
@@ -133,7 +182,7 @@ const CategoryList = ({ categories, userId }) => {
   );
 };
 
-const ArticleList = ({ articles, userId }) => {
+const ArticleList = ({ articles, userId, userRank }) => {
   console.log(`uid:${userId}`);
   return (
     <ul>
