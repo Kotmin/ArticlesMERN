@@ -10,6 +10,8 @@ const {
 const auth = require('../middleware/authMiddleware');
 const owner = require('../middleware/ownershipArticleMiddleware');
 const optionalAuth = require('../middleware/optionalAuthMiddleware');
+const admin = require('../middleware/adminMiddleware');
+const ownershipOrRoleMiddleware = require('../middleware/ownerOrRoleMiddleware');
 
 
 const router = express.Router();
@@ -21,13 +23,13 @@ const router = express.Router();
 
 router.route('/')
   .get(optionalAuth,getAllArticles)
-  .post(createArticle)
-  .delete(deleteAllArticles);
+  .post(auth,createArticle)
+  .delete(auth,admin,deleteAllArticles);
 
 router.route('/:id')
   .get(optionalAuth,getArticleById)
-  .put(updateArticle)
-  .delete(deleteArticle);
+  .put(auth,ownershipOrRoleMiddleware,updateArticle)
+  .delete(auth,ownershipOrRoleMiddleware,deleteArticle);
 
 
 // temp
