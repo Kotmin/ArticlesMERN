@@ -11,25 +11,42 @@ const ARTICLES_URL = '/articles';
 const ArticleDetail = () => {
   const { article_id } = useParams();
   const { authenticatedUser } = useAuthContext();
+
+
+  let config = {};
+  if (authenticatedUser.user) {
+    const aT = localStorage.getItem("accessToken");
+    config = {
+      headers: { Authorization: `Bearer ${aT}` }
+    };
+  }
+
+
   const navigate = useNavigate();
 
   const [article, setArticle] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [authorArticles, setAuthorArticles] = useState({});
+  const [errorLoadingAuthorArticles, setErrorLoadingAuthorArticles] = useState(false);
 
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        const response = await axios.get(`${ARTICLES_URL}/${article_id}`);
+        const response = await axios.get(`${ARTICLES_URL}/${article_id}`,config);
         setArticle(response.data);
 
         // Fetch additional data for each author
         const articlesData = await Promise.all(response.data.authors.map(async (author) => {
-          const articleDetails = await Promise.all(author.articles.slice(0, 5).map(async (articleId) => {
-            const res = await axios.get(`${ARTICLES_URL}/${articleId}`);
-            return res.data;
-          }));
-          return { authorId: author._id, articles: articleDetails };
+          try {
+            const articleDetails = await Promise.all(author.articles.slice(0, 5).map(async (articleId) => {
+              const res = await axios.get(`${ARTICLES_URL}/${articleId}`,config);
+              return res.data;
+            }));
+            return { authorId: author._id, articles: articleDetails };
+          } catch (error) {
+            console.error(`Error fetching articles for author ${author._id}:`, error);
+            return { authorId: author._id, articles: [] };
+          }
         }));
 
         const articlesMap = {};
@@ -106,7 +123,7 @@ const ArticleDetail = () => {
       {article.authors.map(author => (
         <div key={author._id}>
           <p>{author.username}</p>
-          {authorArticles[author._id] ? (
+          {authorArticles[author._id] && authorArticles[author._id].length > 0 ? (
             <ul>
               {authorArticles[author._id].map(a => (
                 <li key={a._id}>
@@ -115,7 +132,7 @@ const ArticleDetail = () => {
               ))}
             </ul>
           ) : (
-            <p>Loading articles...</p>
+            <p>{errorLoadingAuthorArticles ? 'Error loading articles' : 'No accessible articles'}</p>
           )}
         </div>
       ))}
@@ -131,3 +148,4 @@ const ArticleDetail = () => {
 };
 
 export default ArticleDetail;
+

@@ -49,7 +49,7 @@ const Home = () => {
       const articles = response.data;
 
       const draftArticles = articles.filter(article => article.status === 'draft');
-      console.log(draftArticles)
+      // console.log(draftArticles);
 
       const categoriesMap = {};
 

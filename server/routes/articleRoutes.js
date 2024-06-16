@@ -25,7 +25,7 @@ router.route('/')
   .delete(deleteAllArticles);
 
 router.route('/:id')
-  .get(getArticleById)
+  .get(optionalAuth,getArticleById)
   .put(updateArticle)
   .delete(deleteArticle);
 
