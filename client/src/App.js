@@ -16,7 +16,8 @@ import Register from './components/Register';
 import Login from './components/Login';
 import Users from './components/Users';
 
-import AddArticle from './components/AddArticle';
+
+import AddArticle from './components/addArticleFormik';
 
 import RequireAuth from './components/RequireAuth';
 import { AuthProvider } from "./utils/AuthContext"

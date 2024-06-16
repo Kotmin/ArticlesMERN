@@ -42,8 +42,8 @@ const Login = () => {
             const roles = response?.data?.roles;
             const accessToken = response?.data?.token;
 
-            console.log("roles:", roles); // Powinno wyświetlić "Admin"
-            console.log("accessToken:", accessToken); // Powinno wyświetlić Twój token
+            console.log("roles:", roles); 
+            console.log("accessToken:", accessToken); 
 
             setAuthToken(accessToken);
             setUser('');

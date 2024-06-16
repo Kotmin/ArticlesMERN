@@ -32,11 +32,6 @@ exports.getAllArticles = async (req, res) => {
     let query = { status: 'published' }; // Default query
 
     if (req.user) {
-      // console.log("Hello Logged");
-      // console.log(req.user.rank);
-      // console.log(req.user.id);
-      // console.log(req.user);
-
 
       if (req.user.rank === 'Worker' || req.user.rank === 'Moderator' || req.user.rank === 'Admin') {
         // Worker, Moderator, Admin - all Articles
@@ -73,6 +68,8 @@ exports.getAllArticles = async (req, res) => {
 // Get article by ID
 exports.getArticleById = async (req, res) => {
   try {
+
+    
     const article = await Article.findById(req.params.id).populate('category')
     .populate('authors',
     '_id username profileDescription articles'
